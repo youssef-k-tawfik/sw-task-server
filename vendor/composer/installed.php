@@ -3,7 +3,7 @@
         'name' => 'scandiweb/fullstack',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'd0998f1747b0eda1b0c7dd95df2428d9c797a74b',
+        'reference' => 'c2ed759053772b0969573c25588d45dc75634062',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -127,6 +127,12 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'psr/cache-implementation' => array(
+            'dev_requirement' => false,
+            'provided' => array(
+                0 => '2.0|3.0',
+            ),
+        ),
         'psr/container' => array(
             'pretty_version' => '2.0.2',
             'version' => '2.0.2.0',
@@ -151,14 +157,44 @@
                 0 => '1.0|2.0|3.0',
             ),
         ),
+        'psr/simple-cache-implementation' => array(
+            'dev_requirement' => false,
+            'provided' => array(
+                0 => '1.0|2.0|3.0',
+            ),
+        ),
         'scandiweb/fullstack' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'd0998f1747b0eda1b0c7dd95df2428d9c797a74b',
+            'reference' => 'c2ed759053772b0969573c25588d45dc75634062',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
             'dev_requirement' => false,
+        ),
+        'symfony/cache' => array(
+            'pretty_version' => 'v7.2.1',
+            'version' => '7.2.1.0',
+            'reference' => 'e7e983596b744c4539f31e79b0350a6cf5878a20',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/cache',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'symfony/cache-contracts' => array(
+            'pretty_version' => 'v3.5.1',
+            'version' => '3.5.1.0',
+            'reference' => '15a4f8e5cd3bce9aeafc882b1acab39ec8de2c1b',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/cache-contracts',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'symfony/cache-implementation' => array(
+            'dev_requirement' => false,
+            'provided' => array(
+                0 => '1.1|2.0|3.0',
+            ),
         ),
         'symfony/console' => array(
             'pretty_version' => 'v7.2.1',
@@ -260,9 +296,9 @@
             'dev_requirement' => false,
         ),
         'webonyx/graphql-php' => array(
-            'pretty_version' => 'v15.2.1',
-            'version' => '15.2.1.0',
-            'reference' => '6b02da9313065889eb783d623567476500a572ef',
+            'pretty_version' => 'v15.19.1',
+            'version' => '15.19.1.0',
+            'reference' => 'fa01712b1a170ddc1d92047011b2f4c2bdfa8234',
             'type' => 'library',
             'install_path' => __DIR__ . '/../webonyx/graphql-php',
             'aliases' => array(),

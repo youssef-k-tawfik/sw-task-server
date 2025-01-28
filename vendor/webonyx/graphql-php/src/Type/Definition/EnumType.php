@@ -30,7 +30,7 @@ use GraphQL\Utils\Utils;
  *   description?: string|null,
  *   values: EnumValues|callable(): EnumValues,
  *   astNode?: EnumTypeDefinitionNode|null,
- *   extensionASTNodes?: array<int, EnumTypeExtensionNode>|null
+ *   extensionASTNodes?: array<EnumTypeExtensionNode>|null
  * }
  */
 class EnumType extends Type implements InputType, OutputType, LeafType, NullableType, NamedType
@@ -39,7 +39,7 @@ class EnumType extends Type implements InputType, OutputType, LeafType, Nullable
 
     public ?EnumTypeDefinitionNode $astNode;
 
-    /** @var array<int, EnumTypeExtensionNode> */
+    /** @var array<EnumTypeExtensionNode> */
     public array $extensionASTNodes;
 
     /** @phpstan-var EnumTypeConfig */
@@ -63,6 +63,8 @@ class EnumType extends Type implements InputType, OutputType, LeafType, Nullable
     private array $nameLookup;
 
     /**
+     * @throws InvariantViolation
+     *
      * @phpstan-param EnumTypeConfig $config
      */
     public function __construct(array $config)
@@ -75,6 +77,7 @@ class EnumType extends Type implements InputType, OutputType, LeafType, Nullable
         $this->config = $config;
     }
 
+    /** @throws InvariantViolation */
     public function getValue(string $name): ?EnumValueDefinition
     {
         if (! isset($this->nameLookup)) {
@@ -85,6 +88,8 @@ class EnumType extends Type implements InputType, OutputType, LeafType, Nullable
     }
 
     /**
+     * @throws InvariantViolation
+     *
      * @return array<int, EnumValueDefinition>
      */
     public function getValues(): array
@@ -119,6 +124,11 @@ class EnumType extends Type implements InputType, OutputType, LeafType, Nullable
         return $this->values;
     }
 
+    /**
+     * @throws \InvalidArgumentException
+     * @throws InvariantViolation
+     * @throws SerializationError
+     */
     public function serialize($value)
     {
         $lookup = $this->getValueLookup();
@@ -126,11 +136,22 @@ class EnumType extends Type implements InputType, OutputType, LeafType, Nullable
             return $lookup[$value]->name;
         }
 
+        if (is_a($value, \BackedEnum::class)) {
+            return $value->name;
+        }
+
+        if (is_a($value, \UnitEnum::class)) {
+            return $value->name;
+        }
+
         $safeValue = Utils::printSafe($value);
         throw new SerializationError("Cannot serialize value as enum: {$safeValue}");
     }
 
     /**
+     * @throws \InvalidArgumentException
+     * @throws InvariantViolation
+     *
      * @return MixedStore<EnumValueDefinition>
      */
     private function getValueLookup(): MixedStore
@@ -146,6 +167,10 @@ class EnumType extends Type implements InputType, OutputType, LeafType, Nullable
         return $this->valueLookup;
     }
 
+    /**
+     * @throws Error
+     * @throws InvariantViolation
+     */
     public function parseValue($value)
     {
         if (! \is_string($value)) {
@@ -164,6 +189,10 @@ class EnumType extends Type implements InputType, OutputType, LeafType, Nullable
         return $this->nameLookup[$value]->value;
     }
 
+    /**
+     * @throws Error
+     * @throws InvariantViolation
+     */
     public function parseLiteral(Node $valueNode, ?array $variables = null)
     {
         if (! $valueNode instanceof EnumValueNode) {
@@ -189,6 +218,7 @@ class EnumType extends Type implements InputType, OutputType, LeafType, Nullable
     }
 
     /**
+     * @throws Error
      * @throws InvariantViolation
      */
     public function assertValid(): void
@@ -204,6 +234,7 @@ class EnumType extends Type implements InputType, OutputType, LeafType, Nullable
         $this->getValues();
     }
 
+    /** @throws InvariantViolation */
     private function initializeNameLookup(): void
     {
         $this->nameLookup = [];
@@ -212,6 +243,7 @@ class EnumType extends Type implements InputType, OutputType, LeafType, Nullable
         }
     }
 
+    /** @throws InvariantViolation */
     protected function didYouMean(string $unknownValue): ?string
     {
         $suggestions = Utils::suggestionList(
@@ -232,7 +264,7 @@ class EnumType extends Type implements InputType, OutputType, LeafType, Nullable
         return $this->astNode;
     }
 
-    /** @return array<int, EnumTypeExtensionNode> */
+    /** @return array<EnumTypeExtensionNode> */
     public function extensionASTNodes(): array
     {
         return $this->extensionASTNodes;

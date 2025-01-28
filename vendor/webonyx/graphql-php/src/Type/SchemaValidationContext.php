@@ -47,7 +47,7 @@ use GraphQL\Utils\Utils;
 
 class SchemaValidationContext
 {
-    /** @var array<int, Error> */
+    /** @var list<Error> */
     private array $errors = [];
 
     private Schema $schema;
@@ -60,9 +60,7 @@ class SchemaValidationContext
         $this->inputObjectCircularRefs = new InputObjectCircularRefs($this);
     }
 
-    /**
-     * @return array<int, Error>
-     */
+    /** @return list<Error> */
     public function getErrors(): array
     {
         return $this->errors;
@@ -79,9 +77,7 @@ class SchemaValidationContext
         $this->schema->getSubscriptionType();
     }
 
-    /**
-     * @param array<Node|null>|Node|null $nodes
-     */
+    /** @param array<Node|null>|Node|null $nodes */
     public function reportError(string $message, $nodes = null): void
     {
         $nodes = \array_filter(\is_array($nodes) ? $nodes : [$nodes]);
@@ -93,6 +89,7 @@ class SchemaValidationContext
         $this->errors[] = $error;
     }
 
+    /** @throws InvariantViolation */
     public function validateDirectives(): void
     {
         $this->validateDirectiveDefinitions();
@@ -104,6 +101,7 @@ class SchemaValidationContext
         );
     }
 
+    /** @throws InvariantViolation */
     public function validateDirectiveDefinitions(): void
     {
         $directiveDefinitions = [];
@@ -181,9 +179,7 @@ class SchemaValidationContext
         }
     }
 
-    /**
-     * @param (Type&NamedType)|Directive|FieldDefinition|EnumValueDefinition|InputObjectField|Argument $object
-     */
+    /** @param (Type&NamedType)|Directive|FieldDefinition|EnumValueDefinition|InputObjectField|Argument $object */
     private function validateName(object $object): void
     {
         // Ensure names are valid, however introspection types opt out.
@@ -198,9 +194,7 @@ class SchemaValidationContext
         $this->addError($error);
     }
 
-    /**
-     * @return array<int, InputValueDefinitionNode>
-     */
+    /** @return array<int, InputValueDefinitionNode> */
     private function getAllDirectiveArgNodes(Directive $directive, string $argName): array
     {
         $astNode = $directive->astNode;
@@ -218,9 +212,7 @@ class SchemaValidationContext
         return $matchingSubnodes;
     }
 
-    /**
-     * @return NamedTypeNode|ListTypeNode|NonNullTypeNode|null
-     */
+    /** @return NamedTypeNode|ListTypeNode|NonNullTypeNode|null */
     private function getDirectiveArgTypeNode(Directive $directive, string $argName): ?TypeNode
     {
         $argNode = $this->getAllDirectiveArgNodes($directive, $argName)[0] ?? null;
@@ -230,6 +222,7 @@ class SchemaValidationContext
             : $argNode->type;
     }
 
+    /** @throws InvariantViolation */
     public function validateTypes(): void
     {
         $typeMap = $this->schema->getTypeMap();
@@ -276,6 +269,8 @@ class SchemaValidationContext
 
     /**
      * @param NodeList<DirectiveNode> $directives
+     *
+     * @throws InvariantViolation
      */
     private function validateDirectivesAtLocation(NodeList $directives, string $location): void
     {
@@ -313,6 +308,8 @@ class SchemaValidationContext
 
     /**
      * @param ObjectType|InterfaceType $type
+     *
+     * @throws InvariantViolation
      */
     private function validateFields(Type $type): void
     {
@@ -389,36 +386,38 @@ class SchemaValidationContext
     /**
      * @param Schema|ObjectType|InterfaceType|UnionType|EnumType|InputObjectType|Directive $obj
      *
-     * @return array<int, SchemaDefinitionNode|SchemaExtensionNode>|array<int, ObjectTypeDefinitionNode|ObjectTypeExtensionNode>|array<int, InterfaceTypeDefinitionNode|InterfaceTypeExtensionNode>|array<int, UnionTypeDefinitionNode|UnionTypeExtensionNode>|array<int, EnumTypeDefinitionNode|EnumTypeExtensionNode>|array<int, InputObjectTypeDefinitionNode|InputObjectTypeExtensionNode>|array<int, DirectiveDefinitionNode>
+     * @return list<SchemaDefinitionNode|SchemaExtensionNode>|list<ObjectTypeDefinitionNode|ObjectTypeExtensionNode>|list<InterfaceTypeDefinitionNode|InterfaceTypeExtensionNode>|list<UnionTypeDefinitionNode|UnionTypeExtensionNode>|list< EnumTypeDefinitionNode|EnumTypeExtensionNode>|list<InputObjectTypeDefinitionNode|InputObjectTypeExtensionNode>|list<DirectiveDefinitionNode>
      */
     private function getAllNodes(object $obj): array
     {
+        $astNode = $obj->astNode;
+
         if ($obj instanceof Schema) {
-            $astNode = $obj->astNode;
             $extensionNodes = $obj->extensionASTNodes;
         } elseif ($obj instanceof Directive) {
-            $astNode = $obj->astNode;
             $extensionNodes = [];
         } else {
-            $astNode = $obj->astNode;
             $extensionNodes = $obj->extensionASTNodes;
         }
 
-        return $astNode !== null
-            ? \array_merge([$astNode], $extensionNodes)
-            : $extensionNodes;
+        $allNodes = $astNode === null
+            ? []
+            : [$astNode];
+        foreach ($extensionNodes as $extensionNode) {
+            $allNodes[] = $extensionNode;
+        }
+
+        return $allNodes;
     }
 
     /**
      * @param ObjectType|InterfaceType $type
      *
-     * @return array<int, FieldDefinitionNode>
+     * @return list<FieldDefinitionNode>
      */
     private function getAllFieldNodes(Type $type, string $fieldName): array
     {
-        $allNodes = $type->astNode !== null
-            ? \array_merge([$type->astNode], $type->extensionASTNodes)
-            : $type->extensionASTNodes;
+        $allNodes = array_filter([$type->astNode, ...$type->extensionASTNodes]);
 
         $matchingFieldNodes = [];
 
@@ -447,9 +446,7 @@ class SchemaValidationContext
             : $fieldNode->type;
     }
 
-    /**
-     * @param ObjectType|InterfaceType $type
-     */
+    /** @param ObjectType|InterfaceType $type */
     private function getFieldNode(Type $type, string $fieldName): ?FieldDefinitionNode
     {
         $nodes = $this->getAllFieldNodes($type, $fieldName);
@@ -491,9 +488,7 @@ class SchemaValidationContext
             : $fieldArgNode->type;
     }
 
-    /**
-     * @param ObjectType|InterfaceType $type
-     */
+    /** @param ObjectType|InterfaceType $type */
     private function getFieldArgNode(Type $type, string $fieldName, string $argName): ?InputValueDefinitionNode
     {
         $nodes = $this->getAllFieldArgNodes($type, $fieldName, $argName);
@@ -503,6 +498,8 @@ class SchemaValidationContext
 
     /**
      * @param ObjectType|InterfaceType $type
+     *
+     * @throws InvariantViolation
      */
     private function validateInterfaces(ImplementingType $type): void
     {
@@ -579,13 +576,11 @@ class SchemaValidationContext
      * @param ObjectType|InterfaceType $type
      * @param Type&NamedType $shouldBeInterface
      *
-     * @return array<int, NamedTypeNode>
+     * @return list<NamedTypeNode>
      */
     private function getAllImplementsInterfaceNodes(ImplementingType $type, NamedType $shouldBeInterface): array
     {
-        $allNodes = $type->astNode !== null
-            ? \array_merge([$type->astNode], $type->extensionASTNodes)
-            : $type->extensionASTNodes;
+        $allNodes = array_filter([$type->astNode, ...$type->extensionASTNodes]);
 
         $shouldBeInterfaceName = $shouldBeInterface->name;
         $matchingInterfaceNodes = [];
@@ -603,6 +598,8 @@ class SchemaValidationContext
 
     /**
      * @param ObjectType|InterfaceType $type
+     *
+     * @throws InvariantViolation
      */
     private function validateTypeImplementsInterface(ImplementingType $type, InterfaceType $iface): void
     {
@@ -682,9 +679,7 @@ class SchemaValidationContext
         }
     }
 
-    /**
-     * @param ObjectType|InterfaceType $type
-     */
+    /** @param ObjectType|InterfaceType $type */
     private function validateTypeImplementsAncestors(ImplementingType $type, InterfaceType $iface): void
     {
         $typeInterfaces = $type->getInterfaces();
@@ -703,6 +698,7 @@ class SchemaValidationContext
         }
     }
 
+    /** @throws InvariantViolation */
     private function validateUnionMembers(UnionType $union): void
     {
         $memberTypes = $union->getTypes();
@@ -739,14 +735,10 @@ class SchemaValidationContext
         }
     }
 
-    /**
-     * @return array<int, NamedTypeNode>
-     */
+    /** @return list<NamedTypeNode> */
     private function getUnionMemberTypeNodes(UnionType $union, string $typeName): array
     {
-        $allNodes = $union->astNode !== null
-            ? \array_merge([$union->astNode], $union->extensionASTNodes)
-            : $union->extensionASTNodes;
+        $allNodes = array_filter([$union->astNode, ...$union->extensionASTNodes]);
 
         $types = [];
         foreach ($allNodes as $node) {
@@ -760,6 +752,7 @@ class SchemaValidationContext
         return $types;
     }
 
+    /** @throws InvariantViolation */
     private function validateEnumValues(EnumType $enumType): void
     {
         $enumValues = $enumType->getValues();
@@ -793,6 +786,7 @@ class SchemaValidationContext
         }
     }
 
+    /** @throws InvariantViolation */
     private function validateInputFields(InputObjectType $inputObj): void
     {
         $fieldMap = $inputObj->getFields();
@@ -832,10 +826,11 @@ class SchemaValidationContext
         }
     }
 
+    /** @throws InvariantViolation */
     private function validateTypeIsSingleton(Type $type, string $path): void
     {
-        $typeLoader = $this->schema->getConfig()->typeLoader;
-        if ($typeLoader === null) {
+        $schemaConfig = $this->schema->getConfig();
+        if (! isset($schemaConfig->typeLoader)) {
             return;
         }
 
@@ -846,14 +841,14 @@ class SchemaValidationContext
         }
 
         $name = $namedType->name;
-        if ($namedType !== $typeLoader($name)) {
+        if ($namedType !== ($schemaConfig->typeLoader)($name)) {
             throw new InvariantViolation(static::duplicateType($this->schema, $path, $name));
         }
     }
 
     public static function duplicateType(Schema $schema, string $path, string $name): string
     {
-        $hint = $schema->getConfig()->typeLoader !== null
+        $hint = isset($schema->getConfig()->typeLoader)
             ? 'Ensure the type loader returns the same instance. '
             : '';
 

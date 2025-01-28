@@ -2,6 +2,7 @@
 
 namespace GraphQL\Language\AST;
 
+use GraphQL\Error\InvariantViolation;
 use GraphQL\Utils\AST;
 
 /**
@@ -29,9 +30,7 @@ class NodeList implements \ArrayAccess, \IteratorAggregate, \Countable
         $this->nodes = $nodes;
     }
 
-    /**
-     * @param int|string $offset
-     */
+    /** @param int|string $offset */
     #[\ReturnTypeWillChange]
     public function offsetExists($offset): bool
     {
@@ -57,10 +56,13 @@ class NodeList implements \ArrayAccess, \IteratorAggregate, \Countable
     }
 
     /**
-     * @param int|string|null           $offset
+     * @param int|string|null $offset
      * @param Node|array<string, mixed> $value
      *
      * @phpstan-param T|array<string, mixed> $value
+     *
+     * @throws \JsonException
+     * @throws InvariantViolation
      */
     #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value): void
@@ -80,9 +82,7 @@ class NodeList implements \ArrayAccess, \IteratorAggregate, \Countable
         $this->nodes[$offset] = $value;
     }
 
-    /**
-     * @param int|string $offset
-     */
+    /** @param int|string $offset */
     #[\ReturnTypeWillChange]
     public function offsetUnset($offset): void
     {
@@ -129,9 +129,7 @@ class NodeList implements \ArrayAccess, \IteratorAggregate, \Countable
         return new NodeList(\array_merge($this->nodes, $list));
     }
 
-    /**
-     * Resets the keys of the stored nodes to contiguous numeric indexes.
-     */
+    /** Resets the keys of the stored nodes to contiguous numeric indexes. */
     public function reindex(): void
     {
         $this->nodes = array_values($this->nodes);
@@ -139,6 +137,9 @@ class NodeList implements \ArrayAccess, \IteratorAggregate, \Countable
 
     /**
      * Returns a clone of this instance and all its children, except Location $loc.
+     *
+     * @throws \JsonException
+     * @throws InvariantViolation
      *
      * @return static<T>
      */

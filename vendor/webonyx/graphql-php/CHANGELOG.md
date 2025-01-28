@@ -9,6 +9,275 @@ You can find and compare releases at the [GitHub release page](https://github.co
 
 ## Unreleased
 
+## v15.19.1
+
+### Fixed
+
+- Handle fields that return lists in `ResolveInfo::getFieldSelectionWithAliases` https://github.com/webonyx/graphql-php/pull/1664
+
+## v15.19.0
+
+### Added
+
+- Add method `getFieldSelectionWithAliases` to class `ResolveInfo` https://github.com/webonyx/graphql-php/pull/1648
+
+## v15.18.1
+
+### Fixed
+
+- Reset static caches of instances using standard types when overriding them https://github.com/webonyx/graphql-php/pull/1632
+
+## v15.18.0
+
+### Added
+
+- Propagate error messages of client-safe exceptions during `parseValue` https://github.com/webonyx/graphql-php/pull/1624
+
+## v15.17.0
+
+### Added
+
+- Allow customizing PhpEnumType https://github.com/webonyx/graphql-php/pull/1623
+
+## v15.16.1
+
+### Fixed
+
+- Make field args mapper optional https://github.com/webonyx/graphql-php/pull/1622
+
+## v15.16.0
+
+### Added
+
+- Create field args mapper and cache args resolution https://github.com/webonyx/graphql-php/pull/1587
+
+## v15.15.0
+
+### Added
+
+- Add field config decorator when building schema from SDL https://github.com/webonyx/graphql-php/pull/1590
+
+## v15.14.3
+
+### Fixed
+
+- Serialize `BackedEnum` instances by name, not value https://github.com/webonyx/graphql-php/pull/1618
+
+## v15.14.2
+
+### Changed
+
+- Annotate return value of `Helper::validateOperationParams` as list https://github.com/webonyx/graphql-php/pull/1615
+
+## v15.14.1
+
+### Changed
+
+- Narrow type of execution errors from `array` to `list` https://github.com/webonyx/graphql-php/pull/1597
+
+## v15.14.0
+
+### Added
+
+- Allow native PHP enums as return values for SDL-based enums https://github.com/webonyx/graphql-php/pull/1608
+
+## v15.13.0
+
+### Added
+
+- Serialize valid `\BackedEnum` values in `GraphQL\Type\Definition\PhpEnumType` https://github.com/webonyx/graphql-php/pull/1604
+
+## v15.12.5
+
+### Fixed
+
+- Avoid infinite recursion in `QueryDepth` validator https://github.com/webonyx/graphql-php/pull/1581
+
+## v15.12.4
+
+### Fixed
+
+- Ensure `unaliasedPath` does not grow for each list item https://github.com/webonyx/graphql-php/pull/1579
+
+## v15.12.3
+
+### Fixed
+
+- Avoid crash by triggering side effect via `count` on `PHPUnit\Framework\Test` https://github.com/webonyx/graphql-php/pull/1577
+
+## v15.12.2
+
+### Changed
+
+- Optimize and deduplicate ReferenceExecutor https://github.com/webonyx/graphql-php/pull/1572
+
+## v15.12.1
+
+### Fixed
+
+- Remove redundant code in `ReferenceExecutor` https://github.com/webonyx/graphql-php/pull/1570
+
+## v15.12.0
+
+### Added
+
+- Add property `unaliasedPath` to `ResolveInfo` https://github.com/webonyx/graphql-php/pull/1548
+
+## v15.11.2
+
+### Fixed
+
+- Fix `ScopedContext` for mutations https://github.com/webonyx/graphql-php/pull/1549
+
+## v15.11.1
+
+### Fixed
+
+- Count new lines when parsing multi-line comments https://github.com/webonyx/graphql-php/pull/1538
+
+## v15.11.0
+
+### Changed
+
+- Allow scalars from `BuildClientSchema` to have any type https://github.com/webonyx/graphql-php/pull/1536
+
+## v15.10.0
+
+### Changed
+
+- The standard server now produces distinct exception classes instead of generic `RequestError` https://github.com/webonyx/graphql-php/pull/1533
+
+## v15.9.1
+
+### Fixed
+
+- Allow enum instances in `PhpEnumType::parseValue()` https://github.com/webonyx/graphql-php/pull/1519
+
+## v15.9.0
+
+### Added
+
+- Support `react/promise` v3 https://github.com/webonyx/graphql-php/pull/1517
+
+## v15.8.1
+
+### Fixed
+
+- Correctly print deprecated argument with default value https://github.com/webonyx/graphql-php/pull/1491
+
+## v15.8.0
+
+### Added
+
+- Early return when complexity is disabled https://github.com/webonyx/graphql-php/pull/1475
+- Allow access to calculated query complexity https://github.com/webonyx/graphql-php/pull/1475
+
+### Fixed
+
+- Fix PHPStan definition for `SchemaConfig` option `types` https://github.com/webonyx/graphql-php/pull/1479
+
+## v15.7.0
+
+### Added
+
+- Control field visibility through option `visible` https://github.com/webonyx/graphql-php/pull/1434
+
+## v15.6.3
+
+### Fixed
+
+- Fix printing of single line descriptions with Unicode https://github.com/webonyx/graphql-php/pull/1436
+
+## v15.6.2
+
+### Fixed
+
+- Avoid instantiations when checking if types are built-in https://github.com/webonyx/graphql-php/pull/1423
+
+## v15.6.1
+
+### Fixed
+
+- Allow lazy root type callables to return `null` https://github.com/webonyx/graphql-php/pull/1422
+
+## v15.6.0
+
+### Added
+
+- Allow lazy root types `query`, `mutation`, `subscription` https://github.com/webonyx/graphql-php/pull/1418
+
+## v15.5.3
+
+### Fixed
+
+- Also set `queryId` from Apollo-source `sha256Hash` if `query` is provided https://github.com/webonyx/graphql-php/pull/1412
+
+## v15.5.2
+
+### Fixed
+
+- Do not set raw vars on query complexity rule if no validation rules are used https://github.com/webonyx/graphql-php/pull/1413
+
+## v15.5.1
+
+### Fixed
+
+- Remove useless and broken `Parser::document()`, use `parse()`
+
+## v15.5.0
+
+### Added
+
+- Add `ScopedContext` interface to control cloning of the context value
+
+## v15.4.0
+
+### Added
+
+- Allow deprecating input fields and arguments https://github.com/webonyx/graphql-php/pull/1382
+
+## v15.3.2
+
+### Fixed
+
+- Call static methods in `SchemaPrinter` with `static::` to enable overrides
+
+## v15.3.1
+
+### Fixed
+
+- Allow sending both `query` and `queryId`, let `persistedQueryLoader` handle it https://github.com/webonyx/graphql-php/pull/1372
+
+## v15.3.0
+
+### Added
+
+- Provide a custom name for the Enum generated by `PhpEnumType` https://github.com/webonyx/graphql-php/pull/1368
+
+## v15.2.5
+
+### Fixed
+
+- Merge selected fields in `ResolveInfo::getFieldSelection()` https://github.com/webonyx/graphql-php/pull/1365
+
+## v15.2.4
+
+### Fixed
+
+- Ensure `OperationDefinitionNode.variableDefinitions` is initialized
+
+## v15.2.3
+
+### Fixed
+
+- Annotate `@throws` accurately
+
+## v15.2.2
+
+### Fixed
+
+- Improve handling of JSON encoding errors
+
 ## v15.2.1
 
 ### Fixed
@@ -193,6 +462,13 @@ You can find and compare releases at the [GitHub release page](https://github.co
 - Remove alias `GraphQL\Validator\Rules\AbstractQuerySecurity`, use `GraphQL\Validator\Rules\QuerySecurityRule`
 - Remove alias `GraphQL\Validator\Rules\AbstractValidationRule`, use `GraphQL\Validator\Rules\ValidationRule`
 - Remove alias `GraphQL\Utils\FindBreakingChanges`, use `GraphQL\Utils\BreakingChangesFinder`
+
+## v14.11.10
+
+### Fixed
+
+- Fix PHP 8.2 deprecated string interpolation syntax
+- Fix PHP 8.2 deprecated dynamic properties
 
 ## v14.11.9
 

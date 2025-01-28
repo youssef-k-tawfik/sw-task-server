@@ -3,6 +3,7 @@
 namespace GraphQL\Type\Definition;
 
 use GraphQL\Deferred;
+use GraphQL\Error\Error;
 use GraphQL\Error\InvariantViolation;
 use GraphQL\Executor\Executor;
 use GraphQL\Language\AST\ObjectTypeDefinitionNode;
@@ -49,17 +50,19 @@ use GraphQL\Utils\Utils;
  *     ]);
  *
  * @phpstan-import-type FieldResolver from Executor
+ * @phpstan-import-type ArgsMapper from Executor
  *
  * @phpstan-type InterfaceTypeReference InterfaceType|callable(): InterfaceType
  * @phpstan-type ObjectConfig array{
  *   name?: string|null,
  *   description?: string|null,
  *   resolveField?: FieldResolver|null,
+ *   argsMapper?: ArgsMapper|null,
  *   fields: (callable(): iterable<mixed>)|iterable<mixed>,
  *   interfaces?: iterable<InterfaceTypeReference>|callable(): iterable<InterfaceTypeReference>,
  *   isTypeOf?: (callable(mixed $objectValue, mixed $context, ResolveInfo $resolveInfo): (bool|Deferred|null))|null,
  *   astNode?: ObjectTypeDefinitionNode|null,
- *   extensionASTNodes?: array<int, ObjectTypeExtensionNode>|null
+ *   extensionASTNodes?: array<ObjectTypeExtensionNode>|null
  * }
  */
 class ObjectType extends Type implements OutputType, CompositeType, NullableType, HasFieldsType, NamedType, ImplementingType
@@ -70,7 +73,7 @@ class ObjectType extends Type implements OutputType, CompositeType, NullableType
 
     public ?ObjectTypeDefinitionNode $astNode;
 
-    /** @var array<int, ObjectTypeExtensionNode> */
+    /** @var array<ObjectTypeExtensionNode> */
     public array $extensionASTNodes;
 
     /**
@@ -80,10 +83,19 @@ class ObjectType extends Type implements OutputType, CompositeType, NullableType
      */
     public $resolveFieldFn;
 
+    /**
+     * @var callable|null
+     *
+     * @phpstan-var ArgsMapper|null
+     */
+    public $argsMapper;
+
     /** @phpstan-var ObjectConfig */
     public array $config;
 
     /**
+     * @throws InvariantViolation
+     *
      * @phpstan-param ObjectConfig $config
      */
     public function __construct(array $config)
@@ -91,6 +103,7 @@ class ObjectType extends Type implements OutputType, CompositeType, NullableType
         $this->name = $config['name'] ?? $this->inferName();
         $this->description = $config['description'] ?? null;
         $this->resolveFieldFn = $config['resolveField'] ?? null;
+        $this->argsMapper = $config['argsMapper'] ?? null;
         $this->astNode = $config['astNode'] ?? null;
         $this->extensionASTNodes = $config['extensionASTNodes'] ?? [];
 
@@ -114,7 +127,7 @@ class ObjectType extends Type implements OutputType, CompositeType, NullableType
 
     /**
      * @param mixed $objectValue The resolved value for the object type
-     * @param mixed $context     The context that was passed to GraphQL::execute()
+     * @param mixed $context The context that was passed to GraphQL::execute()
      *
      * @return bool|Deferred|null
      */
@@ -133,6 +146,7 @@ class ObjectType extends Type implements OutputType, CompositeType, NullableType
      * Validates type config and throws if one of type options is invalid.
      * Note: this method is shallow, it won't validate object fields and their arguments.
      *
+     * @throws Error
      * @throws InvariantViolation
      */
     public function assertValid(): void
@@ -158,7 +172,7 @@ class ObjectType extends Type implements OutputType, CompositeType, NullableType
         return $this->astNode;
     }
 
-    /** @return array<int, ObjectTypeExtensionNode> */
+    /** @return array<ObjectTypeExtensionNode> */
     public function extensionASTNodes(): array
     {
         return $this->extensionASTNodes;

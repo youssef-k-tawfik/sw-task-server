@@ -3,6 +3,8 @@
 namespace GraphQL\Utils;
 
 use GraphQL\Error\Error;
+use GraphQL\Error\InvariantViolation;
+use GraphQL\Error\SyntaxError;
 use GraphQL\Language\AST\DirectiveDefinitionNode;
 use GraphQL\Language\AST\DocumentNode;
 use GraphQL\Language\AST\Node;
@@ -23,6 +25,7 @@ use GraphQL\Validator\DocumentValidator;
  * See [schema definition language docs](schema-definition-language.md) for details.
  *
  * @phpstan-import-type TypeConfigDecorator from ASTDefinitionBuilder
+ * @phpstan-import-type FieldConfigDecorator from ASTDefinitionBuilder
  *
  * @phpstan-type BuildSchemaOptions array{
  *   assumeValid?: bool,
@@ -40,6 +43,8 @@ use GraphQL\Validator\DocumentValidator;
  *     Set to true to assume the SDL is valid.
  *
  *     Default: false
+ *
+ * @see \GraphQL\Tests\Utils\BuildSchemaTest
  */
 class BuildSchema
 {
@@ -51,6 +56,13 @@ class BuildSchema
      * @phpstan-var TypeConfigDecorator|null
      */
     private $typeConfigDecorator;
+
+    /**
+     * @var callable|null
+     *
+     * @phpstan-var FieldConfigDecorator|null
+     */
+    private $fieldConfigDecorator;
 
     /**
      * @var array<string, bool>
@@ -68,11 +80,13 @@ class BuildSchema
     public function __construct(
         DocumentNode $ast,
         ?callable $typeConfigDecorator = null,
-        array $options = []
+        array $options = [],
+        ?callable $fieldConfigDecorator = null
     ) {
         $this->ast = $ast;
         $this->typeConfigDecorator = $typeConfigDecorator;
         $this->options = $options;
+        $this->fieldConfigDecorator = $fieldConfigDecorator;
     }
 
     /**
@@ -82,23 +96,31 @@ class BuildSchema
      * @param DocumentNode|Source|string $source
      *
      * @phpstan-param TypeConfigDecorator|null $typeConfigDecorator
+     * @phpstan-param FieldConfigDecorator|null $fieldConfigDecorator
      *
      * @param array<string, bool> $options
      *
      * @phpstan-param BuildSchemaOptions $options
      *
      * @api
+     *
+     * @throws \Exception
+     * @throws \ReflectionException
+     * @throws Error
+     * @throws InvariantViolation
+     * @throws SyntaxError
      */
     public static function build(
         $source,
         ?callable $typeConfigDecorator = null,
-        array $options = []
+        array $options = [],
+        ?callable $fieldConfigDecorator = null
     ): Schema {
         $doc = $source instanceof DocumentNode
             ? $source
             : Parser::parse($source);
 
-        return self::buildAST($doc, $typeConfigDecorator, $options);
+        return self::buildAST($doc, $typeConfigDecorator, $options, $fieldConfigDecorator);
     }
 
     /**
@@ -110,23 +132,34 @@ class BuildSchema
      * has no resolve methods, so execution will use default resolvers.
      *
      * @phpstan-param TypeConfigDecorator|null $typeConfigDecorator
+     * @phpstan-param FieldConfigDecorator|null $fieldConfigDecorator
      *
      * @param array<string, bool> $options
      *
      * @phpstan-param BuildSchemaOptions $options
      *
-     * @throws Error
-     *
      * @api
+     *
+     * @throws \Exception
+     * @throws \ReflectionException
+     * @throws Error
+     * @throws InvariantViolation
      */
     public static function buildAST(
         DocumentNode $ast,
         ?callable $typeConfigDecorator = null,
-        array $options = []
+        array $options = [],
+        ?callable $fieldConfigDecorator = null
     ): Schema {
-        return (new self($ast, $typeConfigDecorator, $options))->buildSchema();
+        return (new self($ast, $typeConfigDecorator, $options, $fieldConfigDecorator))->buildSchema();
     }
 
+    /**
+     * @throws \Exception
+     * @throws \ReflectionException
+     * @throws Error
+     * @throws InvariantViolation
+     */
     public function buildSchema(): Schema
     {
         if (
@@ -181,7 +214,8 @@ class BuildSchema
             static function (string $typeName): Type {
                 throw self::unknownType($typeName);
             },
-            $this->typeConfigDecorator
+            $this->typeConfigDecorator,
+            $this->fieldConfigDecorator
         );
 
         $directives = \array_map(
@@ -232,9 +266,7 @@ class BuildSchema
         );
     }
 
-    /**
-     * @return array<string, string>
-     */
+    /** @return array<string, string> */
     private function getOperationTypes(SchemaDefinitionNode $schemaDef): array
     {
         /** @var array<string, string> $operationTypes */
