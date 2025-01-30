@@ -13,7 +13,7 @@ class Order
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private string $id;
+    private int $id;
 
     #[ORM\Column(type: 'integer', name: 'order_number')]
     private string $orderNumber;
