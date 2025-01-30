@@ -21,4 +21,20 @@ class Price
         scale: 2
     )]
     private float $amount;
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function setAmount(float $amount): self
+    {
+        $this->amount = $amount;
+        return $this;
+    }
+
+    public function getAmount(): float
+    {
+        return $this->amount;
+    }
 }

@@ -17,4 +17,20 @@ class Gallery
 
     #[ORM\Column(type: 'text')]
     private string $url;
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function setURL(string $url): self
+    {
+        $this->url = $url;
+        return $this;
+    }
+
+    public function getURL(): string
+    {
+        return $this->url;
+    }
 }

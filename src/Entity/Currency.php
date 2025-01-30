@@ -20,4 +20,31 @@ class Currency
 
     #[ORM\Column(type: 'string')]
     private string $symbol;
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function setLabel(string $label): self
+    {
+        $this->label = $label;
+        return $this;
+    }
+
+    public function getLabel(): string
+    {
+        return $this->label;
+    }
+
+    public function setSymbol(string $symbol): self
+    {
+        $this->symbol = $symbol;
+        return $this;
+    }
+
+    public function getSymbol(): string
+    {
+        return $this->symbol;
+    }
 }

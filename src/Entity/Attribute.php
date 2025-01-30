@@ -17,6 +17,42 @@ class Attribute
     #[ORM\Column(type: 'string')]
     private string $value;
 
-    #[ORM\Column(type: 'string', name: 'display_value')]
+    #[ORM\Column(
+        type: 'string',
+        name: 'display_value'
+    )]
     private string $displayValue;
+
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
+    }
+
+    public function setValue(string $value): self
+    {
+        $this->value = $value;
+        return $this;
+    }
+
+    public function getValue(): string
+    {
+        return $this->value;
+    }
+
+    public function setDisplayValue(string $displayValue): self
+    {
+        $this->displayValue = $displayValue;
+        return $this;
+    }
+
+    public function getDisplayValue(): string
+    {
+        return $this->displayValue;
+    }
 }

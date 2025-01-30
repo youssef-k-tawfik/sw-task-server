@@ -28,4 +28,42 @@ class Order
 
     #[ORM\Column(type: 'datetime', name: 'placed_at')]
     private \DateTimeInterface $placedAt;
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function setOrderNumber(string $orderNumber): self
+    {
+        $this->orderNumber = $orderNumber;
+        return $this;
+    }
+
+    public function getOrderNumber(): string
+    {
+        return $this->orderNumber;
+    }
+
+    public function setTotalCost(float $totalCost): self
+    {
+        $this->totalCost = $totalCost;
+        return $this;
+    }
+
+    public function getTotalCost(): float
+    {
+        return $this->totalCost;
+    }
+
+    public function setPlacedAt(\DateTimeInterface $placedAt): self
+    {
+        $this->placedAt = $placedAt;
+        return $this;
+    }
+
+    public function getPlacedAt(): \DateTimeInterface
+    {
+        return $this->placedAt;
+    }
 }
