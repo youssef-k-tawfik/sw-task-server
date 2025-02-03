@@ -15,7 +15,7 @@ class Order
     #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[ORM\Column(type: 'integer', name: 'order_number')]
+    #[ORM\Column(type: 'string', name: 'order_number')]
     private string $orderNumber;
 
     #[ORM\Column(
@@ -28,6 +28,11 @@ class Order
 
     #[ORM\Column(type: 'datetime', name: 'placed_at')]
     private \DateTimeInterface $placedAt;
+
+    public function __construct()
+    {
+        $this->placedAt = new \DateTimeImmutable();
+    }
 
     public function getId(): int
     {

@@ -25,6 +25,7 @@ class Price
     #[ORM\ManyToOne(
         targetEntity: Currency::class,
         inversedBy: 'prices',
+        cascade: ['persist'],
         fetch: 'EAGER'
     )]
     #[ORM\JoinColumn(nullable: false)]

@@ -44,7 +44,6 @@ class Product
 
     #[ORM\OneToMany(
         targetEntity: Gallery::class,
-        mappedBy: 'product',
         cascade: ['persist', 'remove'],
         fetch: 'EAGER'
     )]
@@ -53,18 +52,17 @@ class Product
 
     #[ORM\OneToMany(
         targetEntity: Price::class,
-        mappedBy: 'product',
         cascade: ['persist', 'remove'],
         fetch: 'EAGER'
     )]
     #[ORM\JoinColumn(nullable: false)]
     private Collection $prices;
 
-    #[ORM\OneToMany(
+    #[ORM\ManyToMany(
         targetEntity: AttributeSet::class,
-        mappedBy: 'products',
         fetch: 'EAGER'
     )]
+    #[ORM\JoinTable(name: 'product_attribute_set')]
     private Collection $attributeSets;
 
     public function __construct()
