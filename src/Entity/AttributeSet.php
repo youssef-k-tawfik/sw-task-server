@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -19,6 +21,20 @@ class AttributeSet
 
     #[ORM\Column(type: 'string')]
     private string $type;
+
+    #[ORM\OneToMany(
+        targetEntity: Attribute::class,
+        mappedBy: 'attributeSet',
+        cascade: ['persist', 'remove'],
+        fetch: 'EAGER'
+    )]
+    #[ORM\JoinColumn(nullable: false)]
+    private Collection $items;
+
+    public function __construct()
+    {
+        $this->items = new ArrayCollection();
+    }
 
     public function setId(string $id): self
     {
@@ -51,5 +67,27 @@ class AttributeSet
     public function getType(): string
     {
         return $this->type;
+    }
+
+    public function addItem(Attribute $item): self
+    {
+        if (!$this->items->contains($item)) {
+            $this->items[] = $item;
+            $item->setAttributeSet($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItem(Attribute $item): self
+    {
+        $this->items->removeElement($item);
+
+        return $this;
+    }
+
+    public function getItems(): Collection
+    {
+        return $this->items;
     }
 }

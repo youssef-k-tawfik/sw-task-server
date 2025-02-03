@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Enum\ProductCategory;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -35,12 +34,45 @@ class Product
     #[ORM\Column(type: 'string')]
     private string $brand;
 
-    #[ORM\Column(
-        type: 'string',
-        enumType: ProductCategory::class
+    #[ORM\ManyToOne(
+        targetEntity: Category::class,
+        inversedBy: 'products',
+        fetch: 'EAGER'
     )]
-    private string $category;
+    #[ORM\JoinColumn(nullable: false)]
+    private Category $category;
 
+    #[ORM\OneToMany(
+        targetEntity: Gallery::class,
+        mappedBy: 'product',
+        cascade: ['persist', 'remove'],
+        fetch: 'EAGER'
+    )]
+    #[ORM\JoinColumn(nullable: false)]
+    private Collection $gallery;
+
+    #[ORM\OneToMany(
+        targetEntity: Price::class,
+        mappedBy: 'product',
+        cascade: ['persist', 'remove'],
+        fetch: 'EAGER'
+    )]
+    #[ORM\JoinColumn(nullable: false)]
+    private Collection $prices;
+
+    #[ORM\OneToMany(
+        targetEntity: AttributeSet::class,
+        mappedBy: 'products',
+        fetch: 'EAGER'
+    )]
+    private Collection $attributeSets;
+
+    public function __construct()
+    {
+        $this->gallery = new ArrayCollection();
+        $this->prices = new ArrayCollection();
+        $this->attributeSets = new ArrayCollection();
+    }
 
     public function setId(string $id): self
     {
@@ -97,14 +129,77 @@ class Product
         return $this->brand;
     }
 
-    public function setCategory(string $category): self
+    public function setCategory(Category $category): self
     {
         $this->category = $category;
         return $this;
     }
 
-    public function getCategory(): string
+    public function getCategory(): Category
     {
         return $this->category;
+    }
+
+    public function addGallery(Gallery $gallery): self
+    {
+        if (!$this->gallery->contains($gallery)) {
+            $this->gallery[] = $gallery;
+        }
+
+        return $this;
+    }
+
+    public function removeGallery(Gallery $gallery): self
+    {
+        $this->gallery->removeElement($gallery);
+
+        return $this;
+    }
+
+    public function getGallery(): Collection
+    {
+        return $this->gallery;
+    }
+
+    public function addPrice(Price $price): self
+    {
+        if (!$this->prices->contains($price)) {
+            $this->prices[] = $price;
+        }
+
+        return $this;
+    }
+
+    public function removePrice(Price $price): self
+    {
+        $this->prices->removeElement($price);
+
+        return $this;
+    }
+
+    public function getPrices(): Collection
+    {
+        return $this->prices;
+    }
+
+    public function addAttributeSet(AttributeSet $attributeSet): self
+    {
+        if (!$this->attributeSets->contains($attributeSet)) {
+            $this->attributeSets[] = $attributeSet;
+        }
+
+        return $this;
+    }
+
+    public function removeAttributeSet(AttributeSet $attributeSet): self
+    {
+        $this->attributeSets->removeElement($attributeSet);
+
+        return $this;
+    }
+
+    public function getAttributeSets(): Collection
+    {
+        return $this->attributeSets;
     }
 }

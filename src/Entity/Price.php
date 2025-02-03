@@ -22,6 +22,14 @@ class Price
     )]
     private float $amount;
 
+    #[ORM\ManyToOne(
+        targetEntity: Currency::class,
+        inversedBy: 'prices',
+        fetch: 'EAGER'
+    )]
+    #[ORM\JoinColumn(nullable: false)]
+    private Currency $currency;
+
     public function getId(): int
     {
         return $this->id;
@@ -36,5 +44,16 @@ class Price
     public function getAmount(): float
     {
         return $this->amount;
+    }
+
+    public function setCurrency(Currency $currency): self
+    {
+        $this->currency = $currency;
+        return $this;
+    }
+
+    public function getCurrency(): Currency
+    {
+        return $this->currency;
     }
 }
