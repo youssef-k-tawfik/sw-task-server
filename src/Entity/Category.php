@@ -18,10 +18,7 @@ class Category
     #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[ORM\Column(
-        type: 'string',
-        enumType: ProductCategory::class
-    )]
+    #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
     #[ORM\OneToMany(

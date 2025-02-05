@@ -18,6 +18,17 @@ class Gallery
     #[ORM\Column(type: 'text')]
     private string $url;
 
+    #[ORM\ManyToOne(
+        targetEntity: Product::class,
+        inversedBy: 'gallery'
+    )]
+    #[ORM\JoinColumn(
+        name: 'product_id',
+        referencedColumnName: 'id',
+        nullable: false
+    )]
+    private Product $product;
+
     public function getId(): int
     {
         return $this->id;
@@ -32,5 +43,16 @@ class Gallery
     public function getURL(): string
     {
         return $this->url;
+    }
+
+    public function setProduct(Product $product): self
+    {
+        $this->product = $product;
+        return $this;
+    }
+
+    public function getProduct(): Product
+    {
+        return $this->product;
     }
 }

@@ -38,12 +38,26 @@ class OrderProduct
     #[ORM\Column(type: 'integer')]
     private int $quantity;
 
-
     #[ORM\ManyToMany(
         targetEntity: Attribute::class,
         fetch: 'EAGER'
     )]
-    #[ORM\JoinTable(name: 'order_product_attributes')]
+    #[ORM\JoinTable(
+        name: 'order_product_attributes',
+        joinColumns: [
+            new ORM\JoinColumn(
+                name: 'order_product_order_id',
+                referencedColumnName: 'order_id'
+            ),
+            new ORM\JoinColumn(
+                name: 'order_product_product_id',
+                referencedColumnName: 'product_id'
+            )
+        ],
+        inverseJoinColumns: [
+            new ORM\JoinColumn(name: 'attribute_id', referencedColumnName: 'id')
+        ]
+    )]
     private Collection $selectedAttributes;
 
     public function __construct()

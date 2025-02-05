@@ -13,19 +13,18 @@ use Doctrine\ORM\Mapping as ORM;
 class AttributeSet
 {
     #[ORM\Id]
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: 'string', length: 255)]
     private string $id;
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: 'string', length: 255)]
     private string $type;
 
     #[ORM\OneToMany(
         targetEntity: Attribute::class,
         mappedBy: 'attributeSet',
-        cascade: ['persist', 'remove'],
         fetch: 'EAGER'
     )]
     #[ORM\JoinColumn(nullable: false)]

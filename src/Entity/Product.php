@@ -8,15 +8,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: 'App\Repository\ProductRepository')]
 #[ORM\Table(name: 'product')]
 class Product
 {
     #[ORM\Id]
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: 'string', length: 255)]
     private string $id;
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
     #[ORM\Column(
@@ -31,7 +31,7 @@ class Product
     )]
     private bool $inStock;
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: 'string', length: 255)]
     private string $brand;
 
     #[ORM\ManyToOne(
@@ -39,11 +39,16 @@ class Product
         inversedBy: 'products',
         fetch: 'EAGER'
     )]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(
+        name: 'category_id',
+        referencedColumnName: 'id',
+        nullable: false
+    )]
     private Category $category;
 
     #[ORM\OneToMany(
         targetEntity: Gallery::class,
+        mappedBy: 'product',
         cascade: ['persist', 'remove'],
         fetch: 'EAGER'
     )]
@@ -52,6 +57,7 @@ class Product
 
     #[ORM\OneToMany(
         targetEntity: Price::class,
+        mappedBy: 'product',
         cascade: ['persist', 'remove'],
         fetch: 'EAGER'
     )]
@@ -59,17 +65,32 @@ class Product
     private Collection $prices;
 
     #[ORM\ManyToMany(
-        targetEntity: AttributeSet::class,
+        targetEntity: Attribute::class,
+        cascade: ['persist'],
         fetch: 'EAGER'
     )]
-    #[ORM\JoinTable(name: 'product_attribute_set')]
-    private Collection $attributeSets;
+    #[ORM\JoinTable(
+        name: 'product_attributes',
+        joinColumns: [
+            new ORM\JoinColumn(
+                name: 'product_id',
+                referencedColumnName: 'id'
+            )
+        ],
+        inverseJoinColumns: [
+            new ORM\JoinColumn(
+                name: 'attribute_id',
+                referencedColumnName: 'id'
+            )
+        ]
+    )]
+    private Collection $attributes;
 
     public function __construct()
     {
         $this->gallery = new ArrayCollection();
         $this->prices = new ArrayCollection();
-        $this->attributeSets = new ArrayCollection();
+        $this->attributes = new ArrayCollection();
     }
 
     public function setId(string $id): self
@@ -180,24 +201,24 @@ class Product
         return $this->prices;
     }
 
-    public function addAttributeSet(AttributeSet $attributeSet): self
+    public function addAttribute(Attribute $attribute): self
     {
-        if (!$this->attributeSets->contains($attributeSet)) {
-            $this->attributeSets[] = $attributeSet;
+        if (!$this->attributes->contains($attribute)) {
+            $this->attributes[] = $attribute;
         }
 
         return $this;
     }
 
-    public function removeAttributeSet(AttributeSet $attributeSet): self
+    public function removeAttribute(Attribute $attribute): self
     {
-        $this->attributeSets->removeElement($attributeSet);
+        $this->attributes->removeElement($attribute);
 
         return $this;
     }
 
-    public function getAttributeSets(): Collection
+    public function getAttribute(): Collection
     {
-        return $this->attributeSets;
+        return $this->attributes;
     }
 }

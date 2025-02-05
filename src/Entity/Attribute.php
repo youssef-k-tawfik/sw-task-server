@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\Order\OrderProduct;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -11,10 +14,10 @@ use Doctrine\ORM\Mapping as ORM;
 class Attribute
 {
     #[ORM\Id]
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: 'string', length: 255)]
     private string $id;
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: 'string', length: 255)]
     private string $value;
 
     #[ORM\Column(
@@ -28,8 +31,29 @@ class Attribute
         inversedBy: 'items',
         fetch: 'EAGER'
     )]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(
+        name: 'attribute_set_id',
+        referencedColumnName: 'id',
+        nullable: false
+    )]
     private AttributeSet $attributeSet;
+
+    #[ORM\ManyToMany(
+        targetEntity: Product::class,
+        mappedBy: 'attributes'
+    )]
+    private Collection $products;
+
+    #[ORM\ManyToMany(
+        targetEntity: OrderProduct::class,
+        mappedBy: 'selectedAttributes'
+    )]
+    private Collection $orderedProducts;
+
+    public function __construct()
+    {
+        $this->orderedProducts = new ArrayCollection();
+    }
 
     public function setId(string $id): self
     {
@@ -73,5 +97,43 @@ class Attribute
     public function getAttributeSet(): AttributeSet
     {
         return $this->attributeSet;
+    }
+
+    public function addOrderedProduct(OrderProduct $orderedProduct): self
+    {
+        $this->orderedProducts[] = $orderedProduct;
+        return $this;
+    }
+
+    public function removeOrderedProduct(OrderProduct $orderedProduct): self
+    {
+        $this->orderedProducts->removeElement($orderedProduct);
+        return $this;
+    }
+
+    public function getOrderedProducts(): Collection
+    {
+        return $this->orderedProducts;
+    }
+
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): self
+    {
+        if (!$this->products->contains($product)) {
+            $this->products[] = $product;
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): self
+    {
+        $this->products->removeElement($product);
+
+        return $this;
     }
 }

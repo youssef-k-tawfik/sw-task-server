@@ -15,7 +15,7 @@ class Order
     #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[ORM\Column(type: 'string', name: 'order_number')]
+    #[ORM\Column(type: 'string', length: 255, name: 'order_number')]
     private string $orderNumber;
 
     #[ORM\Column(

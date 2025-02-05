@@ -31,6 +31,17 @@ class Price
     #[ORM\JoinColumn(nullable: false)]
     private Currency $currency;
 
+    #[ORM\ManyToOne(
+        targetEntity: Product::class,
+        inversedBy: 'prices'
+    )]
+    #[ORM\JoinColumn(
+        name: 'product_id',
+        referencedColumnName: 'id',
+        nullable: false
+    )]
+    private Product $product;
+
     public function getId(): int
     {
         return $this->id;
@@ -56,5 +67,16 @@ class Price
     public function getCurrency(): Currency
     {
         return $this->currency;
+    }
+
+    public function setProduct(Product $product): self
+    {
+        $this->product = $product;
+        return $this;
+    }
+
+    public function getProduct(): Product
+    {
+        return $this->product;
     }
 }
