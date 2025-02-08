@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Utils;
 
+/**
+ * Custom logger class to log messages with colors in terminal while developing
+ */
 class CustomLogger
 {
     /**
@@ -11,7 +14,7 @@ class CustomLogger
      */
     public static function logInfo(string $message): void
     {
-        echo "\n\033[32m\n" . $message . "\n\033[0m\n";
+        echo "\033[32m\n" . $message . "\n\033[0m";
     }
 
     /**
@@ -19,6 +22,6 @@ class CustomLogger
      */
     public static function logError(string $message): void
     {
-        echo "\n\033[31m\n" . $message . "\n\033[0m\n";
+        echo "\033[31m\n" . $message . "\n\033[0m";
     }
 }
