@@ -2,12 +2,31 @@
 
 declare(strict_types=1);
 
+use App\Config\Container;
+use App\Config\Doctrine;
+use App\Utils\CustomLogger;
+
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
+CustomLogger::logInfo('Starting server');
+
+// Loading environment variables
 // $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../'); // for local development only
 $dotenv->load();
 
+// Initializing EntityManager
+$entityManager = Doctrine::getEntityManager();
+
+// Registering EntityManager
+$container = new Container();
+$container->set(EntityManagerInterface::class, $entityManager);
+$container->set(EntityManager::class, $entityManager);
+
+// Routing
 $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
     $r->post('/graphql', [App\Controller\GraphQL::class, 'handle']);
     $r->get("/", fn() => "Server is running"); // for server health check

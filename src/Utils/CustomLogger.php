@@ -14,7 +14,7 @@ class CustomLogger
      */
     public static function logInfo(string $message): void
     {
-        echo "\033[32m\n" . $message . "\n\033[0m";
+        error_log("\033[32m" . $message . "\033[0m");
     }
 
     /**
@@ -22,6 +22,22 @@ class CustomLogger
      */
     public static function logError(string $message): void
     {
-        echo "\033[31m\n" . $message . "\n\033[0m";
+        error_log("\033[31m" . $message . "\033[0m");
+    }
+
+    /**
+     * Logs variables in yellow color for debugging purposes
+     */
+    public static function debug(mixed $var): void
+    {
+        // Only log debug messages in development environment
+        if ($_ENV['APP_ENV'] !== 'development') {
+            return;
+        }
+
+        if (is_array($var) || is_object($var)) {
+            $var = print_r($var, true);
+        }
+        error_log("\033[33m" . $var . "\033[0m");
     }
 }

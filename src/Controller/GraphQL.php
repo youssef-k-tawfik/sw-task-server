@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\GraphQL\GraphQLSchema;
+use App\Utils\CustomLogger;
 use GraphQL\GraphQL as GraphQLBase;
 use RuntimeException;
 use Throwable;
@@ -39,6 +40,8 @@ class GraphQL
                 ],
             ];
         }
+
+        CustomLogger::logInfo('GraphQL responding');
 
         header('Content-Type: application/json; charset=UTF-8');
         return json_encode($output);

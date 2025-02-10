@@ -6,25 +6,38 @@ namespace App\GraphQL;
 
 use App\GraphQL\Resolvers\OrderResolver;
 use App\GraphQL\Resolvers\ProductResolver;
+use App\GraphQL\Resolvers\CategoryResolver;
+
 use App\GraphQL\Types\OrderResponseType;
 use App\GraphQL\Types\ProductType;
+use App\GraphQL\Types\CategoryType;
+
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Schema;
 use GraphQL\Type\SchemaConfig;
 
+use App\Config\Container;
+use App\Repository\CategoryRepository;
+use App\Service\CategoryService;
+
 class GraphQLSchema
 {
     public static function build(): Schema
     {
+        $container = new Container();
 
         $queryType = new ObjectType([
             'name' => 'Query',
             'fields' => [
-                'products' => [
-                    'type' => Type::listOf(new ProductType()),
-                    'resolve' => [ProductResolver::class, 'getProducts'],
+                'categories' => [
+                    'type' => Type::listOf(new CategoryType()),
+                    'resolve' => [$container->get(CategoryResolver::class), 'getCategories'],
                 ],
+                // 'products' => [
+                //     'type' => Type::listOf(new ProductType()),
+                //     'resolve' => [$container->get(ProductResolver::class), 'getProducts'],
+                // ],
             ]
         ]);
 
