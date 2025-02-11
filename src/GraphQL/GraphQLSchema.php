@@ -36,6 +36,7 @@ class GraphQLSchema
                     'type' => Type::listOf(new ProductType()),
                     'args' => [
                         'category' => Type::string(),
+                        'id' => Type::string(),
                     ],
                     'resolve' => [
                         $container->get(ProductResolver::class),

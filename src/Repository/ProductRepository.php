@@ -21,8 +21,10 @@ class ProductRepository extends EntityRepository
             ->getRepository(Product::class);
     }
 
-    public function getAllProducts(?string $category = null): array
-    {
+    public function getAllProducts(
+        ?string $category = null,
+        ?string $productId = null
+    ): array {
         $queryBuilder = $this->productRepository
             ->createQueryBuilder('p')
             ->select(
@@ -40,6 +42,11 @@ class ProductRepository extends EntityRepository
         if ($category) {
             $queryBuilder->where('c.name = :category')
                 ->setParameter('category', $category);
+        }
+
+        if ($productId) {
+            $queryBuilder->where('p.id = :productId')
+                ->setParameter('productId', $productId);
         }
 
         return $queryBuilder->getQuery()->getScalarResult();

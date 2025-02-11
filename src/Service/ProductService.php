@@ -16,10 +16,21 @@ class ProductService
         $this->productRepository = $productRepository;
     }
 
-    public function getAllProducts(?string $category = null): array
-    {
+    /**
+     * Fetches a list of products from the repository, optionally filtered by category and product ID.
+     *
+     * @param string|null $category Optional category filter.
+     * @param string|null $productId Optional product ID filter.
+     * @return array List of products.
+     * @throws \Exception If no products are found or an error occurs during fetching.
+     */
+    public function getAllProducts(
+        ?string $category = null,
+        ?string $productId = null
+    ): array {
         try {
-            $products = $this->productRepository->getAllProducts($category);
+            $products = $this->productRepository
+                ->getAllProducts($category, $productId);
 
             if (!$products) {
                 throw new \Exception("Products not found");
@@ -35,24 +46,35 @@ class ProductService
         }
     }
 
+    /**
+     * Maps the gallery URLs to the products.
+     * 
+     * @param array $products List of products.
+     * @return array List of products with gallery URLs.
+     * @throws \Exception If an error occurs during mapping.
+     */
     private function mapGallery(array $products): array
     {
-        $mappedProducts = [];
-        foreach ($products as $product) {
-            if (!isset($mappedProducts[$product['id']])) {
-                $mappedProducts[$product['id']] = [
-                    'id' => $product['id'],
-                    'name' => $product['name'],
-                    'description' => $product['description'],
-                    'brand' => $product['brand'],
-                    'inStock' => $product['inStock'],
-                    'category' => $product['category'],
-                    'gallery' => [],
-                ];
-            }
+        try {
+            $mappedProducts = [];
+            foreach ($products as $product) {
+                if (!isset($mappedProducts[$product['id']])) {
+                    $mappedProducts[$product['id']] = [
+                        'id' => $product['id'],
+                        'name' => $product['name'],
+                        'description' => $product['description'],
+                        'brand' => $product['brand'],
+                        'inStock' => $product['inStock'],
+                        'category' => $product['category'],
+                        'gallery' => [],
+                    ];
+                }
 
-            $mappedProducts[$product['id']]['gallery'][] = $product['gallery'];
+                $mappedProducts[$product['id']]['gallery'][] = $product['gallery'];
+            }
+            return array_values($mappedProducts);
+        } catch (\Exception $e) {
+            throw new \Exception("Error mapping gallery: {$e->getMessage()}");
         }
-        return array_values($mappedProducts);
     }
 }

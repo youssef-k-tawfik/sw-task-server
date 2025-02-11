@@ -20,9 +20,14 @@ class ProductResolver
     {
         try {
             $category = $args['category'] ?? null;
+            $productId = $args['id'] ?? null;
+
             // CustomLogger::debug($category);
             CustomLogger::logInfo("Fetching " . ($category ?? "all") . " products");
-            $products = $this->productService->getAllProducts($category);
+            CustomLogger::logInfo("Fetching " . ($productId ?? "PRODUCT") . " product data");
+
+            $products = $this->productService
+                ->getAllProducts($category, $productId);
             return $products;
         } catch (\Exception $e) {
             throw new \Exception("Error fetching products: {$e->getMessage()}");
