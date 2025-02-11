@@ -18,14 +18,6 @@ class CustomLogger
     }
 
     /**
-     * Logs the error message in red color
-     */
-    public static function logError(string $message): void
-    {
-        error_log("\033[31m" . $message . "\033[0m");
-    }
-
-    /**
      * Logs variables in yellow color for debugging purposes
      */
     public static function debug(mixed $var): void

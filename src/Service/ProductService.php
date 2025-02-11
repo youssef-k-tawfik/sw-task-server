@@ -5,20 +5,54 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Repository\ProductRepository;
+use App\Utils\CustomLogger;
 
 class ProductService
 {
-    public function __construct(
-        private ProductRepository $productRepository
-    ) {}
+    private ProductRepository $productRepository;
 
-    public function getAllProducts(): array
+    public function __construct(ProductRepository $productRepository)
     {
-        return $this->productRepository->fetchAllProducts();
+        $this->productRepository = $productRepository;
     }
 
-    public function getProductsByCategory(string $category): array
+    public function getAllProducts(?string $category = null): array
     {
-        return $this->productRepository->fetchByCategory($category);
+        try {
+            $products = $this->productRepository->getAllProducts($category);
+
+            if (!$products) {
+                throw new \Exception("Products not found");
+            }
+
+            $products = $this->mapGallery($products);
+
+            // CustomLogger::debug($products);
+            CustomLogger::logInfo("Fetched all products");
+            return $products;
+        } catch (\Exception $e) {
+            throw new \Exception("Error fetching products: {$e->getMessage()}");
+        }
+    }
+
+    private function mapGallery(array $products): array
+    {
+        $mappedProducts = [];
+        foreach ($products as $product) {
+            if (!isset($mappedProducts[$product['id']])) {
+                $mappedProducts[$product['id']] = [
+                    'id' => $product['id'],
+                    'name' => $product['name'],
+                    'description' => $product['description'],
+                    'brand' => $product['brand'],
+                    'inStock' => $product['inStock'],
+                    'category' => $product['category'],
+                    'gallery' => [],
+                ];
+            }
+
+            $mappedProducts[$product['id']]['gallery'][] = $product['gallery'];
+        }
+        return array_values($mappedProducts);
     }
 }

@@ -4,26 +4,28 @@ declare(strict_types=1);
 
 namespace App\GraphQL\Resolvers;
 
+use App\Service\ProductService;
+use App\Utils\CustomLogger;
+
 class ProductResolver
 {
-    public static function getProducts(): array
+    private ProductService $productService;
+
+    public function __construct(ProductService $productService)
     {
-        return [
-            [
-                'id' => 1,
-                'name' => 'Product 1',
-                'price' => 100,
-            ],
-            [
-                'id' => 2,
-                'name' => 'Product 2',
-                'price' => 200,
-            ],
-            [
-                'id' => 3,
-                'name' => 'Product 3',
-                'price' => 300,
-            ],
-        ];
+        $this->productService = $productService;
+    }
+
+    public function getProducts($root, $args): array
+    {
+        try {
+            $category = $args['category'] ?? null;
+            // CustomLogger::debug($category);
+            CustomLogger::logInfo("Fetching " . ($category ?? "all") . " products");
+            $products = $this->productService->getAllProducts($category);
+            return $products;
+        } catch (\Exception $e) {
+            throw new \Exception("Error fetching products: {$e->getMessage()}");
+        }
     }
 }

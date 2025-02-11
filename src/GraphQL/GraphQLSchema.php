@@ -18,8 +18,6 @@ use GraphQL\Type\Schema;
 use GraphQL\Type\SchemaConfig;
 
 use App\Config\Container;
-use App\Repository\CategoryRepository;
-use App\Service\CategoryService;
 
 class GraphQLSchema
 {
@@ -34,10 +32,16 @@ class GraphQLSchema
                     'type' => Type::listOf(new CategoryType()),
                     'resolve' => [$container->get(CategoryResolver::class), 'getCategories'],
                 ],
-                // 'products' => [
-                //     'type' => Type::listOf(new ProductType()),
-                //     'resolve' => [$container->get(ProductResolver::class), 'getProducts'],
-                // ],
+                'products' => [
+                    'type' => Type::listOf(new ProductType()),
+                    'args' => [
+                        'category' => Type::string(),
+                    ],
+                    'resolve' => [
+                        $container->get(ProductResolver::class),
+                        'getProducts'
+                    ],
+                ],
             ]
         ]);
 
