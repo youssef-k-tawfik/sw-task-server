@@ -132,7 +132,10 @@ foreach ($data['products'] as $productData) {
             $attributeRepository = $entityManager
                 ->getRepository(Attribute::class);
             $attribute = $attributeRepository
-                ->findOneBy(['id' => $attributeData['id']]);
+                ->findOneBy([
+                    'id' => $attributeData['id'],
+                    'attributeSet' => $attributeSet
+                ]);
 
             // If attribute does not exist, create a new one
             if (!$attribute) {

@@ -55,7 +55,10 @@ class OrderProduct
             )
         ],
         inverseJoinColumns: [
-            new ORM\JoinColumn(name: 'attribute_id', referencedColumnName: 'id')
+            new ORM\JoinColumn(
+                name: 'attribute_id',
+                referencedColumnName: 'identifier'
+            )
         ]
     )]
     private Collection $selectedAttributes;

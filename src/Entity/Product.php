@@ -80,7 +80,7 @@ class Product
         inverseJoinColumns: [
             new ORM\JoinColumn(
                 name: 'attribute_id',
-                referencedColumnName: 'id'
+                referencedColumnName: 'identifier'
             )
         ]
     )]

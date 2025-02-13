@@ -13,7 +13,13 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'attribute')]
 class Attribute
 {
+    // adding identifier to store same id with different identifier
+    // for "yes" and "no" attributes
     #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private string $identifier;
+
     #[ORM\Column(type: 'string', length: 255)]
     private string $id;
 
@@ -59,6 +65,11 @@ class Attribute
     {
         $this->id = $id;
         return $this;
+    }
+
+    public function getIdentifier(): string
+    {
+        return $this->identifier;
     }
 
     public function getId(): string
