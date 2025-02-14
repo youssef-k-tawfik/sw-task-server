@@ -21,10 +21,8 @@ use App\Config\Container;
 
 class GraphQLSchema
 {
-    public static function build(): Schema
+    public static function build(Container $container): Schema
     {
-        $container = new Container();
-
         $queryType = new ObjectType([
             'name' => 'Query',
             'fields' => [

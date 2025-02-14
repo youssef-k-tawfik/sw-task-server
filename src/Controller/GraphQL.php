@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Config\Container;
 use App\GraphQL\GraphQLSchema;
 use App\Utils\CustomLogger;
 use GraphQL\GraphQL as GraphQLBase;
@@ -12,11 +13,11 @@ use Throwable;
 
 class GraphQL
 {
-    static public function handle(): string
+    public static function handle(Container $container): string
     {
         try {
             // build schema
-            $schema = GraphQLSchema::build();
+            $schema = GraphQLSchema::build($container);
 
             // parse input
             $rawInput = file_get_contents('php://input');

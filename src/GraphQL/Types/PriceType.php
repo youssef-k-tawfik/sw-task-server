@@ -11,10 +11,8 @@ use GraphQL\Type\Definition\Type;
 
 class PriceType extends ObjectType
 {
-    public function __construct()
+    public function __construct(Container $container)
     {
-        $container = new Container();
-
         parent::__construct([
             'name' => 'Price',
             'fields'

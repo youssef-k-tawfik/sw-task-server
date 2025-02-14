@@ -12,10 +12,8 @@ use GraphQL\Type\Definition\Type;
 
 class ProductType extends ObjectType
 {
-    public function __construct()
+    public function __construct(Container $container)
     {
-        $container = new Container();
-
         parent::__construct([
             'name' => 'Product',
             'fields'

@@ -81,11 +81,15 @@ class Container implements ContainerInterface
                     );
                 }
 
+                $classType = $type->getName();
                 if (
                     !$type->isBuiltin()
                     && $type instanceof \ReflectionNamedType
                 ) {
-                    return $this->get($type->getName());
+                    if ($classType === self::class) {
+                        return $this;
+                    }
+                    return $this->get($classType);
                 }
 
                 throw new ReflectionException(

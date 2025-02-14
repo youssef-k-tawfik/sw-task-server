@@ -27,10 +27,14 @@ $container->set(EntityManagerInterface::class, $entityManager);
 $container->set(EntityManager::class, $entityManager);
 
 // Routing
-$dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
-    $r->post('/graphql', [App\Controller\GraphQL::class, 'handle']);
-    $r->get("/", fn() => "Server is running"); // for server health check
-});
+$dispatcher = FastRoute\simpleDispatcher(
+    function (FastRoute\RouteCollector $r) use ($container) {
+        $r->post('/graphql', function () use ($container) {
+            return \App\Controller\GraphQL::handle($container);
+        });
+        $r->get("/", fn() => "Server is running"); // for server health check
+    }
+);
 
 $routeInfo = $dispatcher->dispatch(
     $_SERVER['REQUEST_METHOD'],
