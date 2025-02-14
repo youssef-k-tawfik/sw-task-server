@@ -8,22 +8,22 @@ use App\Entity\Attribute;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
-class AttributeRepository extends EntityRepository
+class AttributesRepository extends EntityRepository
 {
     private EntityManagerInterface $entityManager;
-    private EntityRepository $attributeRepository;
+    private EntityRepository $attributesRepository;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
-        $this->attributeRepository = $this
+        $this->attributesRepository = $this
             ->entityManager
             ->getRepository(Attribute::class);
     }
 
     public function fetchAttributes(): array
     {
-        return $this->attributeRepository
+        return $this->attributesRepository
             ->createQueryBuilder('a')
             ->getQuery()
             ->getSingleResult();

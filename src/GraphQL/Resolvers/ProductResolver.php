@@ -23,8 +23,13 @@ class ProductResolver
             $productId = $args['id'] ?? null;
 
             // CustomLogger::debug($category);
-            CustomLogger::logInfo("Fetching " . ($category ?? "all") . " products");
-            CustomLogger::logInfo("Fetching " . ($productId ?? "PRODUCT") . " product data");
+            if ($category) {
+                CustomLogger::logInfo("Fetching '{$category}' category products");
+            } else if ($productId) {
+                CustomLogger::logInfo("Fetching '{$productId}' product data");
+            } else {
+                CustomLogger::logInfo("THIS SH0ULD NEVER BE L0GGED L0L");
+            }
 
             $products = $this->productService
                 ->getAllProducts($category, $productId);

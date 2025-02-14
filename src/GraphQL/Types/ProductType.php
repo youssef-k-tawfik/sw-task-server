@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\GraphQL\Types;
 
 use App\Config\Container;
-use App\GraphQL\Resolvers\AttributeSetResolver;
+use App\GraphQL\Resolvers\AttributesResolver;
 use App\GraphQL\Resolvers\PriceResolver;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
@@ -39,8 +39,8 @@ class ProductType extends ObjectType
                         $container->get(AttributeSetType::class)
                     )),
                     'resolve' => [
-                        $container->get(AttributeSetResolver::class),
-                        'getAttributeSets'
+                        $container->get(AttributesResolver::class),
+                        'getAttributes'
                     ]
                 ],
             ],

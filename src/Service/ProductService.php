@@ -39,7 +39,12 @@ class ProductService
             $products = $this->mapGallery($products);
 
             // CustomLogger::debug($products);
-            CustomLogger::logInfo("Fetched all products");
+            if (count($products) === 1) {
+                CustomLogger::logInfo("Fetched '{$products[0]['name']}' product data");
+            } else {
+                CustomLogger::logInfo("Fetched '{$category}' category products");
+            }
+
             return $products;
         } catch (\Exception $e) {
             throw new \Exception("Error fetching products: {$e->getMessage()}");
