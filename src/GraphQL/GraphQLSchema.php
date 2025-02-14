@@ -29,11 +29,18 @@ class GraphQLSchema
             'name' => 'Query',
             'fields' => [
                 'categories' => [
-                    'type' => Type::listOf(new CategoryType()),
-                    'resolve' => [$container->get(CategoryResolver::class), 'getCategories'],
+                    'type' => Type::listOf(
+                        $container->get(CategoryType::class)
+                    ),
+                    'resolve' => [
+                        $container->get(CategoryResolver::class),
+                        'getCategories'
+                    ],
                 ],
                 'products' => [
-                    'type' => Type::listOf(new ProductType()),
+                    'type' => Type::listOf(
+                        $container->get(ProductType::class)
+                    ),
                     'args' => [
                         'category' => Type::string(),
                         'id' => Type::string(),

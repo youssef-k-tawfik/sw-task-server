@@ -21,11 +21,11 @@ class AttributeSetType extends ObjectType
                 'id' => Type::nonNull(Type::string()),
                 'name' => Type::nonNull(Type::string()),
                 'type' => Type::nonNull(Type::string()),
-                'items' => [
-                    'type' => Type::listOf(Type::nonNull(new AttributeType())),
-                    'resolve' => $container->get(AttributeResolver::class),
-                    'getAttributes'
-                ],
+                'items' =>  Type::listOf(
+                    Type::nonNull(
+                        $container->get(AttributeType::class)
+                    )
+                )
             ],
         ]);
     }

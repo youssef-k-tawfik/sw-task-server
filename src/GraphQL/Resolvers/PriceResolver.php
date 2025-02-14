@@ -16,9 +16,10 @@ class PriceResolver
         $this->priceRepository = $PriceRepository;
     }
 
-    public function getAllPrices(string $productID): array
+    public function getAllPrices($root): array
     {
         try {
+            $productID = $root['id'] ?? null;
             if (!$productID) {
                 throw new \Exception("Product ID is required");
             }

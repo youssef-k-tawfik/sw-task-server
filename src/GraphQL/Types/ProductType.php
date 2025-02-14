@@ -28,14 +28,18 @@ class ProductType extends ObjectType
                 'category' => Type::nonNull(Type::string()),
                 'gallery' => Type::listOf(Type::nonNull(Type::string())),
                 'prices' => [
-                    'type' => Type::listOf(Type::nonNull(new PriceType())),
-                    'resolve' => function ($product) use ($container) {
-                        return $container->get(PriceResolver::class)
-                            ->getAllPrices($product['id']);
-                    }
+                    'type' => Type::listOf(Type::nonNull(
+                        $container->get(PriceType::class)
+                    )),
+                    'resolve' => [
+                        $container->get(PriceResolver::class),
+                        'getAllPrices'
+                    ]
                 ],
                 'attributes' => [
-                    'type' => Type::listOf(Type::nonNull(new AttributeSetType())),
+                    'type' => Type::listOf(Type::nonNull(
+                        $container->get(AttributeSetType::class)
+                    )),
                     'resolve' => [
                         $container->get(AttributeSetResolver::class),
                         'getAttributeSets'

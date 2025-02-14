@@ -21,7 +21,7 @@ class PriceType extends ObjectType
             => [
                 'amount' => Type::nonNull(Type::float()),
                 'currency' => [
-                    'type' => Type::nonNull(new CurrencyType()),
+                    'type' => Type::nonNull($container->get(CurrencyType::class)),
                     'resolve' => [
                         $container->get(CurrencyResolver::class),
                         'getCurrency'
