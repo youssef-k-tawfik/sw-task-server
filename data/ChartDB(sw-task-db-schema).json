@@ -1,0 +1,784 @@
+{
+  "id": "0",
+  "name": "sw-task-db-schema",
+  "createdAt": "2025-02-04T16:28:01.558Z",
+  "updatedAt": "2025-02-04T16:28:01.558Z",
+  "databaseType": "mysql",
+  "tables": [
+    {
+      "id": "1",
+      "name": "category",
+      "x": 62.75,
+      "y": 222.5,
+      "fields": [
+        {
+          "id": "2",
+          "name": "id",
+          "type": {
+            "id": "int",
+            "name": "int"
+          },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1737710196454
+        },
+        {
+          "id": "3",
+          "name": "name",
+          "type": {
+            "id": "varchar",
+            "name": "varchar"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1737710426895
+        }
+      ],
+      "indexes": [],
+      "color": "#8a61f5",
+      "isView": false,
+      "createdAt": 1737710196454,
+      "order": 1,
+      "diagramId": "c3wyzkz12l1w"
+    },
+    {
+      "id": "4",
+      "name": "product_attributes",
+      "x": 714.9821321325622,
+      "y": 95.25992103212741,
+      "fields": [
+        {
+          "id": "5",
+          "name": "product_id",
+          "type": {
+            "id": "varchar",
+            "name": "varchar"
+          },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1737827243440
+        },
+        {
+          "id": "6",
+          "name": "attribute_id",
+          "type": {
+            "id": "varchar",
+            "name": "varchar"
+          },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1737827277390
+        }
+      ],
+      "indexes": [],
+      "color": "#ff6363",
+      "isView": false,
+      "createdAt": 1737827243440,
+      "comments": "unique id here composition of product_id and attribute_id",
+      "order": 3,
+      "diagramId": "c3wyzkz12l1w"
+    },
+    {
+      "id": "7",
+      "name": "order",
+      "x": 713.5,
+      "y": -116.50000000000006,
+      "fields": [
+        {
+          "id": "8",
+          "name": "id",
+          "type": {
+            "id": "int",
+            "name": "int"
+          },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1737828552639
+        },
+        {
+          "id": "9",
+          "name": "order_number",
+          "type": {
+            "name": "varchar",
+            "id": "varchar"
+          },
+          "primaryKey": false,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1737828565458
+        },
+        {
+          "id": "10",
+          "name": "total_cost",
+          "type": {
+            "id": "decimal",
+            "name": "decimal"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1737829901576
+        },
+        {
+          "id": "11",
+          "name": "placed_at",
+          "type": {
+            "id": "datetime",
+            "name": "datetime"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": true,
+          "createdAt": 1737829917071
+        }
+      ],
+      "indexes": [
+        {
+          "id": "12",
+          "name": "index_1",
+          "unique": false,
+          "fieldIds": [
+            "9"
+          ],
+          "createdAt": 1737828707258
+        }
+      ],
+      "color": "#ffe374",
+      "isView": false,
+      "createdAt": 1737828552639,
+      "order": 10,
+      "diagramId": "c3wyzkz12l1w"
+    },
+    {
+      "id": "13",
+      "name": "attribute",
+      "x": 1013.75,
+      "y": 127,
+      "fields": [
+        {
+          "id": "14",
+          "name": "id",
+          "type": {
+            "id": "varchar",
+            "name": "varchar"
+          },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1737821917042
+        },
+        {
+          "id": "15",
+          "name": "value",
+          "type": {
+            "id": "varchar",
+            "name": "varchar"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1737827925479
+        },
+        {
+          "id": "16",
+          "name": "display_value",
+          "type": {
+            "id": "varchar",
+            "name": "varchar"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1737827964823
+        },
+        {
+          "id": "17",
+          "name": "attribute_set_id",
+          "type": {
+            "id": "varchar",
+            "name": "varchar"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1737827579054
+        }
+      ],
+      "indexes": [
+        {
+          "id": "18",
+          "name": "index_1",
+          "unique": false,
+          "fieldIds": [
+            "17"
+          ],
+          "createdAt": 1737828800712
+        }
+      ],
+      "color": "#ff6363",
+      "isView": false,
+      "createdAt": 1737821917042,
+      "order": 5,
+      "diagramId": "c3wyzkz12l1w"
+    },
+    {
+      "id": "19",
+      "name": "product",
+      "x": 408,
+      "y": 95,
+      "fields": [
+        {
+          "id": "20",
+          "name": "id",
+          "type": {
+            "id": "varchar",
+            "name": "varchar"
+          },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1737821896200
+        },
+        {
+          "id": "21",
+          "name": "name",
+          "type": {
+            "id": "varchar",
+            "name": "varchar"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1737823572552
+        },
+        {
+          "id": "22",
+          "name": "in_stock",
+          "type": {
+            "id": "boolean",
+            "name": "boolean"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1737825179331
+        },
+        {
+          "id": "23",
+          "name": "description",
+          "type": {
+            "id": "text",
+            "name": "text"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": true,
+          "createdAt": 1737825222846
+        },
+        {
+          "id": "24",
+          "name": "category_id",
+          "type": {
+            "id": "int",
+            "name": "int"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1737825238456
+        },
+        {
+          "id": "25",
+          "name": "brand",
+          "type": {
+            "id": "varchar",
+            "name": "varchar"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1737827210926
+        }
+      ],
+      "indexes": [],
+      "color": "#8eb7ff",
+      "isView": false,
+      "createdAt": 1737821896201,
+      "order": 2,
+      "diagramId": "c3wyzkz12l1w"
+    },
+    {
+      "id": "26",
+      "name": "price",
+      "x": 699.8,
+      "y": 380.6,
+      "fields": [
+        {
+          "id": "27",
+          "name": "id",
+          "type": {
+            "id": "bigint",
+            "name": "bigint"
+          },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1737821971328
+        },
+        {
+          "id": "28",
+          "name": "amount",
+          "type": {
+            "id": "decimal",
+            "name": "decimal"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1737827692862
+        },
+        {
+          "id": "29",
+          "name": "currency_id",
+          "type": {
+            "id": "int",
+            "name": "int"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1737827706530
+        },
+        {
+          "id": "30",
+          "name": "product_id",
+          "type": {
+            "id": "varchar",
+            "name": "varchar"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1737828108157
+        }
+      ],
+      "indexes": [
+        {
+          "id": "31",
+          "name": "index_1",
+          "unique": false,
+          "fieldIds": [
+            "30"
+          ],
+          "createdAt": 1737828724146
+        }
+      ],
+      "color": "#4dee8a",
+      "isView": false,
+      "createdAt": 1737821971328,
+      "order": 6,
+      "diagramId": "c3wyzkz12l1w"
+    },
+    {
+      "id": "32",
+      "name": "attribute_set",
+      "x": 1351,
+      "y": 223,
+      "fields": [
+        {
+          "id": "33",
+          "name": "id",
+          "type": {
+            "id": "varchar",
+            "name": "varchar"
+          },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1737821938989
+        },
+        {
+          "id": "34",
+          "name": "name",
+          "type": {
+            "id": "varchar",
+            "name": "varchar"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1737827882262
+        },
+        {
+          "id": "35",
+          "name": "type",
+          "type": {
+            "id": "varchar",
+            "name": "varchar"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1737827895207
+        }
+      ],
+      "indexes": [],
+      "color": "#ff6363",
+      "isView": false,
+      "createdAt": 1737821938989,
+      "order": 4,
+      "diagramId": "c3wyzkz12l1w"
+    },
+    {
+      "id": "36",
+      "name": "order_products",
+      "x": 702.5,
+      "y": -325.03439474105835,
+      "fields": [
+        {
+          "id": "37",
+          "name": "product_id",
+          "type": {
+            "id": "varchar",
+            "name": "varchar"
+          },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1737828609375
+        },
+        {
+          "id": "38",
+          "name": "order_id",
+          "type": {
+            "id": "int",
+            "name": "int"
+          },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1737828630796
+        },
+        {
+          "id": "39",
+          "name": "quantity",
+          "type": {
+            "id": "int",
+            "name": "int"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1737829343327
+        }
+      ],
+      "indexes": [],
+      "color": "#ffe374",
+      "isView": false,
+      "createdAt": 1737828609375,
+      "comments": "unique key: product_id + order_id composition",
+      "order": 8,
+      "diagramId": "c3wyzkz12l1w"
+    },
+    {
+      "id": "40",
+      "name": "gallery",
+      "x": 64.50000000000003,
+      "y": 31.074999999999946,
+      "fields": [
+        {
+          "id": "41",
+          "name": "id",
+          "type": {
+            "id": "int",
+            "name": "int"
+          },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1737830264883
+        },
+        {
+          "id": "42",
+          "name": "url",
+          "type": {
+            "id": "text",
+            "name": "text"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1737830276607
+        },
+        {
+          "id": "43",
+          "name": "product_id",
+          "type": {
+            "id": "varchar",
+            "name": "varchar"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1737830296392
+        }
+      ],
+      "indexes": [
+        {
+          "id": "44",
+          "name": "index_1",
+          "unique": false,
+          "fieldIds": [
+            "43"
+          ],
+          "createdAt": 1737830308602
+        }
+      ],
+      "color": "#ff9f74",
+      "isView": false,
+      "createdAt": 1737830264883,
+      "order": 0,
+      "diagramId": "c3wyzkz12l1w"
+    },
+    {
+      "id": "45",
+      "name": "currency",
+      "x": 1029.3999999999999,
+      "y": 444.3999999999999,
+      "fields": [
+        {
+          "id": "46",
+          "name": "id",
+          "type": {
+            "id": "int",
+            "name": "int"
+          },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1737821956594
+        },
+        {
+          "id": "47",
+          "name": "label",
+          "type": {
+            "id": "varchar",
+            "name": "varchar"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1737827723704
+        },
+        {
+          "id": "48",
+          "name": "symbol",
+          "type": {
+            "id": "varchar",
+            "name": "varchar"
+          },
+          "primaryKey": false,
+          "unique": false,
+          "nullable": false,
+          "createdAt": 1737827731312
+        }
+      ],
+      "indexes": [],
+      "color": "#4dee8a",
+      "isView": false,
+      "createdAt": 1737821956594,
+      "order": 7,
+      "diagramId": "c3wyzkz12l1w"
+    },
+    {
+      "id": "49",
+      "name": "order_product_attributes",
+      "x": 1044.375,
+      "y": -324.58125858306886,
+      "fields": [
+        {
+          "id": "50",
+          "name": "product_id",
+          "type": {
+            "id": "varchar",
+            "name": "varchar"
+          },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1737929015470
+        },
+        {
+          "id": "51",
+          "name": "order_id",
+          "type": {
+            "id": "int",
+            "name": "int"
+          },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1737929628339
+        },
+        {
+          "id": "52",
+          "name": "attribute_id",
+          "type": {
+            "id": "varchar",
+            "name": "varchar"
+          },
+          "primaryKey": true,
+          "unique": true,
+          "nullable": false,
+          "createdAt": 1737929112569
+        }
+      ],
+      "indexes": [],
+      "color": "#ffe374",
+      "isView": false,
+      "createdAt": 1737929015470,
+      "width": 224,
+      "comments": "the unique key here is the composite of (product id + order id) and the attribute id",
+      "order": 9,
+      "diagramId": "c3wyzkz12l1w"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "53",
+      "name": "attribute_set_id_fk",
+      "sourceTableId": "32",
+      "targetTableId": "13",
+      "sourceFieldId": "33",
+      "targetFieldId": "17",
+      "sourceCardinality": "one",
+      "targetCardinality": "many",
+      "createdAt": 1737827597802,
+      "diagramId": "c3wyzkz12l1w"
+    },
+    {
+      "id": "54",
+      "name": "currency_id_fk",
+      "sourceTableId": "45",
+      "targetTableId": "26",
+      "sourceFieldId": "46",
+      "targetFieldId": "29",
+      "sourceCardinality": "one",
+      "targetCardinality": "many",
+      "createdAt": 1737827751623,
+      "diagramId": "c3wyzkz12l1w"
+    },
+    {
+      "id": "55",
+      "name": "gallery_product_id_fk",
+      "sourceTableId": "40",
+      "targetTableId": "19",
+      "sourceFieldId": "43",
+      "targetFieldId": "20",
+      "sourceCardinality": "many",
+      "targetCardinality": "one",
+      "createdAt": 1737830315857,
+      "diagramId": "c3wyzkz12l1w"
+    },
+    {
+      "id": "56",
+      "name": "order_id_fk",
+      "sourceTableId": "7",
+      "targetTableId": "36",
+      "sourceFieldId": "8",
+      "targetFieldId": "38",
+      "sourceCardinality": "one",
+      "targetCardinality": "many",
+      "createdAt": 1737828658021,
+      "diagramId": "c3wyzkz12l1w"
+    },
+    {
+      "id": "57",
+      "name": "order_products_product_id_fk",
+      "sourceTableId": "36",
+      "targetTableId": "49",
+      "sourceFieldId": "37",
+      "targetFieldId": "50",
+      "sourceCardinality": "many",
+      "targetCardinality": "one",
+      "createdAt": 1737929218832,
+      "diagramId": "c3wyzkz12l1w"
+    },
+    {
+      "id": "58",
+      "name": "order_products_product_id_fk",
+      "sourceTableId": "36",
+      "targetTableId": "19",
+      "sourceFieldId": "37",
+      "targetFieldId": "20",
+      "sourceCardinality": "many",
+      "targetCardinality": "one",
+      "createdAt": 1737828651326,
+      "diagramId": "c3wyzkz12l1w"
+    },
+    {
+      "id": "59",
+      "name": "price_product_id_fk",
+      "sourceTableId": "26",
+      "targetTableId": "19",
+      "sourceFieldId": "30",
+      "targetFieldId": "20",
+      "sourceCardinality": "many",
+      "targetCardinality": "one",
+      "createdAt": 1737828123043,
+      "diagramId": "c3wyzkz12l1w"
+    },
+    {
+      "id": "60",
+      "name": "product_category_id_fk",
+      "sourceTableId": "19",
+      "targetTableId": "1",
+      "sourceFieldId": "24",
+      "targetFieldId": "2",
+      "sourceCardinality": "many",
+      "targetCardinality": "one",
+      "createdAt": 1737827654903,
+      "diagramId": "c3wyzkz12l1w"
+    },
+    {
+      "id": "61",
+      "name": "product_id_fk",
+      "sourceTableId": "19",
+      "targetTableId": "4",
+      "sourceFieldId": "20",
+      "targetFieldId": "5",
+      "sourceCardinality": "one",
+      "targetCardinality": "many",
+      "createdAt": 1737827523722,
+      "diagramId": "c3wyzkz12l1w"
+    },
+    {
+      "id": "62",
+      "name": "order_product_attributes_attribute_id_fk",
+      "sourceTableId": "49",
+      "targetTableId": "13",
+      "sourceFieldId": "52",
+      "targetFieldId": "14",
+      "sourceCardinality": "many",
+      "targetCardinality": "one",
+      "createdAt": 1738686342007
+    },
+    {
+      "id": "63",
+      "name": "product_attributes_attribute_id_fk",
+      "sourceTableId": "4",
+      "targetTableId": "13",
+      "sourceFieldId": "6",
+      "targetFieldId": "14",
+      "sourceCardinality": "many",
+      "targetCardinality": "one",
+      "createdAt": 1738686349039
+    }
+  ],
+  "dependencies": []
+}
