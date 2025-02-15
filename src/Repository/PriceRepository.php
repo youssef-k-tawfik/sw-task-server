@@ -29,6 +29,6 @@ class PriceRepository extends EntityRepository
             ->where('p.product = :productId')
             ->setParameter('productId', $productId)
             ->getQuery()
-            ->getScalarResult();
+            ->getArrayResult();
     }
 }

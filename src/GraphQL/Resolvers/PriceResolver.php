@@ -24,7 +24,6 @@ class PriceResolver
                 throw new \Exception("Product ID is required");
             }
 
-            CustomLogger::logInfo("Fetching prices for product: '{$productID}'");
             $prices = $this->priceRepository->fetchAllPrices($productID);
             CustomLogger::debug($prices);
             return $prices;

@@ -21,11 +21,30 @@ class AttributesRepository extends EntityRepository
             ->getRepository(Attribute::class);
     }
 
-    public function fetchAttributes(): array
+    /**
+     * Fetch attributes for a given product id
+     * 
+     * @param string $productId
+     * 
+     * @return array
+     */
+    public function fetchAttributes(string $productId): array
     {
         return $this->attributesRepository
             ->createQueryBuilder('a')
+            ->innerJoin('a.products', 'p')
+            ->innerJoin('a.attributeSet', 'aSet')
+            ->where('p.id = :productId')
+            ->setParameter('productId', $productId)
+            ->select(
+                'a.id',
+                'a.value',
+                'a.displayValue',
+                'aSet.id AS attributeSetId',
+                'aSet.name AS attributeSetName',
+                'aSet.type AS attributeSetType'
+            )
             ->getQuery()
-            ->getSingleResult();
+            ->getArrayResult();
     }
 }

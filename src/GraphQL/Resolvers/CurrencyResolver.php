@@ -21,14 +21,13 @@ class CurrencyResolver
     {
         try {
             $currencyId = $root['currencyId'];
+
             // if currency is already fetched, return it
             $currency = $this->currencies[$currencyId] ?? null;
             if ($currency) {
-                CustomLogger::logInfo("Currency id: '{$currencyId}' found in cache");
                 return $currency;
             }
 
-            CustomLogger::logInfo("Fetching Currency id: '{$currencyId}'");
             $currency = $this->currencyRepository
                 ->fetchCurrency($currencyId);
 
