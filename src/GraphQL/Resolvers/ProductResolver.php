@@ -28,7 +28,7 @@ class ProductResolver
             } else if ($productId) {
                 CustomLogger::logInfo("Fetching '{$productId}' product data");
             } else {
-                CustomLogger::logInfo("THIS SH0ULD NEVER BE L0GGED L0L");
+                CustomLogger::logInfo("Fetching all products data");
             }
 
             $products = $this->productService

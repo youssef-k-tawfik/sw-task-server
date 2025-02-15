@@ -27,6 +27,12 @@ class CustomLogger
             return;
         }
 
+        // Get the caller file
+        $backtrace = debug_backtrace();
+        $caller = $backtrace[1]['file'] ?? 'unknown file';
+        error_log("\033[36mCalled from: " . $caller . "\033[0m");
+
+        // transform the variable into a string
         if (is_array($var) || is_object($var)) {
             $var = print_r($var, true);
         }
