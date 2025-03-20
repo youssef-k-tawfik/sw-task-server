@@ -7,7 +7,7 @@ namespace App\Entity\Order;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'order')]
+#[ORM\Table(name: '`order`')]
 class Order
 {
     #[ORM\Id]
@@ -27,11 +27,11 @@ class Order
     private float $totalCost;
 
     #[ORM\Column(type: 'datetime', name: 'placed_at')]
-    private \DateTimeInterface $placedAt;
+    private \DateTime $placedAt;
 
     public function __construct()
     {
-        $this->placedAt = new \DateTimeImmutable();
+        $this->placedAt = new \DateTime();
     }
 
     public function getId(): int

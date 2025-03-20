@@ -52,16 +52,14 @@ class Product
         cascade: ['persist', 'remove'],
         fetch: 'EAGER'
     )]
-    #[ORM\JoinColumn(nullable: false)]
     private Collection $gallery;
 
     #[ORM\OneToMany(
         targetEntity: Price::class,
         mappedBy: 'product',
         cascade: ['persist', 'remove'],
-        fetch: 'EAGER'
+        // fetch: 'EAGER'
     )]
-    #[ORM\JoinColumn(nullable: false)]
     private Collection $prices;
 
     #[ORM\ManyToMany(

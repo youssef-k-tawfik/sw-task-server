@@ -14,7 +14,9 @@ class OrderResponseType extends ObjectType
         parent::__construct([
             'name' => 'OrderResponse',
             'fields' => [
-                'order_number' => Type::nonNull(Type::int()),
+                'order_number' => [
+                    'type' => Type::nonNull(Type::string())
+                ],
             ],
         ]);
     }

@@ -8,9 +8,10 @@ use App\GraphQL\Resolvers\OrderResolver;
 use App\GraphQL\Resolvers\ProductResolver;
 use App\GraphQL\Resolvers\CategoryResolver;
 
-use App\GraphQL\Types\OrderResponseType;
 use App\GraphQL\Types\ProductType;
 use App\GraphQL\Types\CategoryType;
+use App\GraphQL\Types\OrderResponseType;
+use App\GraphQL\Types\OrderItemInputType;
 
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
@@ -54,14 +55,24 @@ class GraphQLSchema
         $mutationType = new ObjectType([
             'name' => 'Mutation',
             'fields' => [
-                'InsertOrder' => [
-                    'type' => new OrderResponseType(),
+                'placeOrder' => [
+                    'type' => $container->get(OrderResponseType::class),
                     'args' => [
-                        'number' => Type::nonNull(Type::int()),
+                        'orderItems' => [
+                            'type' =>
+                            Type::nonNull(
+                                Type::listOf(
+                                    $container->get(OrderItemInputType::class)
+                                )
+                            ),
+                        ],
                     ],
-                    'resolve' => [OrderResolver::class, 'insertOrder'],
+                    'resolve' => [
+                        $container->get(OrderResolver::class),
+                        'placeOrder'
+                    ],
                 ],
-            ]
+            ],
         ]);
 
         return new Schema(
