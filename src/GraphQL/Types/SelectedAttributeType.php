@@ -7,16 +7,15 @@ namespace App\GraphQL\Types;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
-class OrderResponseType extends ObjectType
+class SelectedAttributeType extends ObjectType
 {
     public function __construct()
     {
         parent::__construct([
-            'name' => 'OrderResponse',
+            'name' => 'SelectedAttribute',
             'fields' => [
-                'order_number' => [
-                    'type' => Type::nonNull(Type::string())
-                ],
+                'id' => ['type' => Type::string()],
+                'value' => ['type' => Type::string()],
             ],
         ]);
     }

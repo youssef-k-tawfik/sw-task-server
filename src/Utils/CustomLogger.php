@@ -23,7 +23,8 @@ class CustomLogger
     public static function debug(mixed $var): void
     {
         // Only log debug messages in development environment
-        if ($_ENV['APP_ENV'] !== 'development') {
+        $env = $_ENV['APP_ENV'] ?? 'production';
+        if ($env !== 'development') {
             return;
         }
 

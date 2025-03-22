@@ -15,7 +15,8 @@ class Doctrine
 
         $paths = [__DIR__ . '/../Entity'];
 
-        $isDevMode = $_ENV['APP_ENV'] === 'development';
+        $env = $_ENV['APP_ENV'] ?? 'production';
+        $isDevMode = $env === 'development';
 
         $dbParams = [
             'driver'   => $_ENV['DB_DRIVER'],

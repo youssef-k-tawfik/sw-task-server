@@ -27,7 +27,6 @@ class AttributeSet
         mappedBy: 'attributeSet',
         fetch: 'EAGER'
     )]
-    #[ORM\JoinColumn(nullable: false)]
     private Collection $items;
 
     public function __construct()
