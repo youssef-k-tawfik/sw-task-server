@@ -13,7 +13,7 @@ php -S localhost:8000 -t public
 
 and start Apache server using XAMPP or anything else similar.
 
-To seed the database, run the following command:
+To seed the database, run the following command from the `dev` branch:
 ```bash
 php data/seed.php
 ```
