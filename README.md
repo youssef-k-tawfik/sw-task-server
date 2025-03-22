@@ -6,8 +6,16 @@ This is the backend test task for Fullstack (React + PHP) at Scandiweb.
 
 To run the project, clone the repository and execute the following command:
 
+Using PHP built-in server:
 ```bash
 php -S localhost:8000 -t public
+```
+
+and start Apache server using XAMPP or anything else similar.
+
+To seed the database, run the following command:
+```bash
+php data/seed.php
 ```
 
 ## Future Enhancements
