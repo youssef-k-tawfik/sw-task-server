@@ -9,20 +9,23 @@ use App\Entity\Order\OrderProduct;
 use App\Entity\Product;
 use App\Entity\Attribute;
 use App\Entity\Price;
-
+use App\Service\ProductService;
 use App\Utils\CustomLogger;
 use Doctrine\ORM\EntityManagerInterface;
 
 class OrderRepository
 {
     private EntityManagerInterface $entityManager;
+    private ProductService $productService;
     private PriceRepository $priceRepository;
 
     public function __construct(
         EntityManagerInterface $entityManager,
+        ProductService $productService,
         PriceRepository $priceRepository
     ) {
         $this->entityManager = $entityManager;
+        $this->productService = $productService;
         $this->priceRepository = $priceRepository;
     }
 
@@ -140,4 +143,83 @@ class OrderRepository
             throw $e;
         }
     }
+
+    /**
+     * Fetches the dates of the given orders.
+     *
+     * @param array $orders
+     * @return array
+     */
+    public function getDates(array $orders): array
+    {
+        CustomLogger::logInfo("Fetching dates for orders: " . json_encode($orders));
+        try {
+            $dates = [];
+            foreach ($orders as $orderNumber) {
+                $order = $this->entityManager
+                    ->getRepository(Order::class)
+                    ->findOneBy(['orderNumber' => $orderNumber]);
+
+                if ($order) {
+                    $placedAt = $order->getPlacedAt()->format('d M Y');
+                    $dates[] = $placedAt;
+                } else {
+                    CustomLogger::logInfo("Order not found: " . $orderNumber);
+                }
+            }
+            CustomLogger::logInfo("Dates fetched successfully!");
+            return $dates;
+        } catch (\Exception $e) {
+            CustomLogger::logInfo("Error fetching dates: " . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    /**
+     * Fetches the order with the given order number.
+     *
+     * @param string $orderNumber
+     * @return array
+     */
+    // public function getOrder(string $orderNumber): array
+    // {
+    //     CustomLogger::logInfo("Fetching order: " . $orderNumber);
+    //     try {
+    //         $order = $this->entityManager
+    //             ->getRepository(Order::class)
+    //             ->findOneBy(['orderNumber' => $orderNumber]);
+
+    //         if ($order) {
+    //             $orderData = [];
+
+    //             foreach ($order->getOrderProducts() as $orderProduct) {
+    //                 $product = $orderProduct->getProduct();
+    //                 $productId = $orderProduct->getProduct()->getId();
+    //                 $productDetails = $this->productService->getAllProducts(null, $productId);
+    //                 $productDetails = $product[0];
+    //                 // CustomLogger::debug("Product fetched: " . json_encode($product));
+
+    //                 $attributes = $product->getAttributes();
+    //                 CustomLogger::debug("Attributes fetched: " . json_encode($attributes->toArray()));
+
+    //                 $productData = [
+    //                     'product' => $product,
+    //                     'quantity' => $orderProduct->getQuantity(),
+    //                     // 'selectedAttributes' => $selectedAttributes->toArray()
+    //                 ];
+
+    //                 $orderData[] = $productData;
+    //             }
+
+    //             CustomLogger::logInfo("Order fetched successfully!");
+    //             return $orderData;
+    //         } else {
+    //             CustomLogger::logInfo("Order not found: " . $orderNumber);
+    //             throw new \Exception("Order not found: " . $orderNumber);
+    //         }
+    //     } catch (\Exception $e) {
+    //         CustomLogger::logInfo("Error fetching order: " . $e->getMessage());
+    //         throw $e;
+    //     }
+    // }
 }

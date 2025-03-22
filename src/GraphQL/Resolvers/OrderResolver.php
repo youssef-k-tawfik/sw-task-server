@@ -24,4 +24,14 @@ class OrderResolver
 
         return ["order_number" => $order->getOrderNumber()];
     }
+
+    public function getDates($root, $args): array
+    {
+        return $this->orderService->getDates($args['orders']);
+    }
+
+    // public function getOrder($root, $args): array
+    // {
+    //     return $this->orderService->getOrder($args['orderNumber']);
+    // }
 }

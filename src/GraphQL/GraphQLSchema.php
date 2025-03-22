@@ -19,6 +19,7 @@ use GraphQL\Type\Schema;
 use GraphQL\Type\SchemaConfig;
 
 use App\Config\Container;
+use App\GraphQL\Types\OrderItemType;
 
 class GraphQLSchema
 {
@@ -49,6 +50,28 @@ class GraphQLSchema
                         'getProducts'
                     ],
                 ],
+                'dates' => [
+                    'type' => Type::listOf(Type::string()),
+                    'args' => [
+                        'orders' => Type::listOf(Type::string()),
+                    ],
+                    'resolve' => [
+                        $container->get(OrderResolver::class),
+                        'getDates'
+                    ],
+                ],
+                // 'order' => [
+                //     'type' => Type::listOf(
+                //         $container->get(OrderItemType::class)
+                //     ),
+                //     'args' => [
+                //         'orderNumber' => Type::string(),
+                //     ],
+                //     'resolve' => [
+                //         $container->get(OrderResolver::class),
+                //         'getOrder'
+                //     ],
+                // ],
             ]
         ]);
 

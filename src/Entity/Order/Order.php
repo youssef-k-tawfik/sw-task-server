@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity\Order;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -29,9 +31,19 @@ class Order
     #[ORM\Column(type: 'datetime', name: 'placed_at')]
     private \DateTime $placedAt;
 
+
+    #[ORM\OneToMany(
+        targetEntity: OrderProduct::class,
+        mappedBy: 'order',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
+    private Collection $orderProducts;
+
     public function __construct()
     {
         $this->placedAt = new \DateTime();
+        $this->orderProducts = new ArrayCollection();
     }
 
     public function getId(): int
@@ -61,14 +73,41 @@ class Order
         return $this->totalCost;
     }
 
-    public function setPlacedAt(\DateTimeInterface $placedAt): self
+    public function setPlacedAt(\DateTime $placedAt): self
     {
         $this->placedAt = $placedAt;
         return $this;
     }
 
-    public function getPlacedAt(): \DateTimeInterface
+    public function getPlacedAt(): \DateTime
     {
         return $this->placedAt;
+    }
+
+    public function getOrderProducts(): Collection
+    {
+        return $this->orderProducts;
+    }
+
+    public function addOrderProduct(OrderProduct $orderProduct): self
+    {
+        if (!$this->orderProducts->contains($orderProduct)) {
+            $this->orderProducts[] = $orderProduct;
+            $orderProduct->setOrder($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderProduct(OrderProduct $orderProduct): self
+    {
+        if ($this->orderProducts->removeElement($orderProduct)) {
+            // set the owning side to null (unless already changed)
+            if ($orderProduct->getOrder() === $this) {
+                $orderProduct->setOrder(null);
+            }
+        }
+
+        return $this;
     }
 }

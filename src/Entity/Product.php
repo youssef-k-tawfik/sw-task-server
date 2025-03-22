@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Entity\Order\OrderProduct;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -84,11 +85,19 @@ class Product
     )]
     private Collection $attributes;
 
+    #[ORM\OneToMany(
+        targetEntity: OrderProduct::class,
+        mappedBy: 'product'
+    )]
+    private Collection $orderProducts;
+
+
     public function __construct()
     {
         $this->gallery = new ArrayCollection();
         $this->prices = new ArrayCollection();
         $this->attributes = new ArrayCollection();
+        $this->orderProducts = new ArrayCollection();
     }
 
     public function setId(string $id): self
@@ -218,5 +227,32 @@ class Product
     public function getAttribute(): Collection
     {
         return $this->attributes;
+    }
+
+    public function addOrderProduct(OrderProduct $orderProduct): self
+    {
+        if (!$this->orderProducts->contains($orderProduct)) {
+            $this->orderProducts[] = $orderProduct;
+            $orderProduct->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderProduct(OrderProduct $orderProduct): self
+    {
+        if ($this->orderProducts->removeElement($orderProduct)) {
+            // set the owning side to null (unless already changed)
+            if ($orderProduct->getProduct() === $this) {
+                $orderProduct->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getOrderProducts(): Collection
+    {
+        return $this->orderProducts;
     }
 }

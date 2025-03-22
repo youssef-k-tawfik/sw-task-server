@@ -68,7 +68,7 @@ class OrderProduct
         $this->selectedAttributes = new ArrayCollection();
     }
 
-    public function setOrder(Order $order): self
+    public function setOrder(?Order $order): self
     {
         $this->order = $order;
         return $this;
@@ -79,7 +79,7 @@ class OrderProduct
         return $this->order;
     }
 
-    public function setProduct(Product $product): self
+    public function setProduct(?Product $product): self
     {
         $this->product = $product;
         return $this;
