@@ -5,10 +5,15 @@ declare(strict_types=1);
 namespace App\GraphQL\Types;
 
 use App\Config\Container;
-use App\GraphQL\Resolvers\AttributesResolver;
-use App\GraphQL\Resolvers\PriceResolver;
+
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
+
+use App\GraphQL\Types\Attribute\AttributeSetType;
+use App\GraphQL\Types\Price\PriceType;
+
+use App\GraphQL\Resolvers\AttributesResolver;
+use App\GraphQL\Resolvers\PriceResolver;
 
 class ProductType extends ObjectType
 {

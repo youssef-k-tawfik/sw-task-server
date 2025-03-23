@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\GraphQL\Types;
+namespace App\GraphQL\Types\Attribute;
 
-use App\Config\Container;
-use App\GraphQL\Resolvers\AttributeResolver;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
+
+use App\Config\Container;
 
 class AttributeSetType extends ObjectType
 {

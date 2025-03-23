@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\GraphQL\Types;
+namespace App\GraphQL\Types\Price;
 
 use App\Config\Container;
-use App\GraphQL\Resolvers\CurrencyResolver;
+
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
+
+use App\GraphQL\Resolvers\CurrencyResolver;
 
 class PriceType extends ObjectType
 {

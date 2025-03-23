@@ -22,7 +22,7 @@ class ProductResolver
             $category = $args['category'] ?? null;
             $productId = $args['id'] ?? null;
 
-            CustomLogger::debug($category);
+            CustomLogger::debug(__FILE__, __LINE__,$category);
             if ($category) {
                 CustomLogger::logInfo("Fetching '{$category}' category products");
             } else if ($productId) {

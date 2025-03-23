@@ -35,7 +35,7 @@ class CurrencyResolver
                 throw new \Exception("Currency not found");
             }
 
-            CustomLogger::debug($currency);
+            CustomLogger::debug(__FILE__, __LINE__,$currency);
             // store currency in cache
             $this->currencies[$currencyId] = $currency;
             return $currency;

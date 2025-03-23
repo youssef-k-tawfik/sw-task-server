@@ -44,13 +44,42 @@ class OrderService
 
 
     /**
-     * Fetches the order with the given order number.
+     * Retrieves an order by order number and maps it to a GraphQL response DTO.
      *
      * @param string $orderNumber
-     * @return array
+     * @return OrderResponseType
+     * @throws Exception
      */
-    // public function getOrder(string $orderNumber): array
+    // public function getOrder(string $orderNumber): OrderResponseType
     // {
-    //     return $this->orderRepository->getOrder($orderNumber);
+    //     // Retrieve the fully hydrated Order entity.
+    //     $orderEntity = $this->orderRepository->getOrder($orderNumber);
+
+    //     // Map the domain Order entity to a GraphQL response object.
+    //     $orderResponse = new OrderResponseType();
+    //     $orderResponse->orderNumber = $orderEntity->getOrderNumber();
+    //     $orderResponse->totalCost = $orderEntity->getTotalCost();
+    //     $orderResponse->placedAt = $orderEntity->getPlacedAt()->format('d M Y');
+
+    //     // Map each OrderProduct to an OrderItem.
+    //     foreach ($orderEntity->getOrderProducts() as $orderProduct) {
+    //         $orderItem = new OrderItemType();
+    //         $orderItem->product = $orderProduct->getProduct(); // You might further map Product if needed.
+    //         $orderItem->quantity = $orderProduct->getQuantity();
+
+    //         // Map selected attributes from the order product.
+    //         $selectedAttributes = [];
+    //         foreach ($orderProduct->getSelectedAttributes() as $attribute) {
+    //             $selectedAttributes[] = [
+    //                 'id'    => $attribute->getId(),
+    //                 'value' => $attribute->getValue()
+    //             ];
+    //         }
+    //         $orderItem->selectedAttributes = $selectedAttributes;
+
+    //         $orderResponse->orderItems[] = $orderItem;
+    //     }
+
+    //     return $orderResponse;
     // }
 }

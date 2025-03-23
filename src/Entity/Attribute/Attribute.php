@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Entity;
+namespace App\Entity\Attribute;
 
-use App\Entity\Order\OrderProduct;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+
+use App\Entity\Order\OrderProduct;
+use App\Entity\Product;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'attribute')]
