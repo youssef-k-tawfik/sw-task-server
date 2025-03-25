@@ -4,31 +4,48 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Validator\Exception\ValidationFailedException;
+use App\DTO\Order\OrderItemInputDTO;
+
 use App\Repository\OrderRepository;
 use App\Entity\Order\Order;
+use App\Utils\CustomLogger;
 
 class OrderService
 {
+    private ValidatorInterface $validator;
     private OrderRepository $orderRepository;
 
-    public function __construct(OrderRepository $orderRepository)
-    {
+    public function __construct(
+        ValidatorInterface $validator,
+        OrderRepository $orderRepository
+    ) {
+        $this->validator = $validator;
         $this->orderRepository = $orderRepository;
     }
 
     /**
      * Validates input, processes orderItems and persists the order.
      *
-     * @param array $orderItems
+     * @param OrderItemInputDTO[] $orderItemsInput
      * @return Order
+     * @throws \Exception If validation fails
      */
-    public function placeOrder(array $orderItems): Order
+    public function placeOrder(array $orderItemsInput): Order
     {
-        // Perform any necessary validation on $orderItems here
-        // Example: Validate that quantity is positive, product exists, etc.
+        foreach ($orderItemsInput as $input) {
+            $errors = $this->validator->validate($input);
+            CustomLogger::logInfo("Validating order item: " . json_encode($input));
+            CustomLogger::debug(__FILE__, __LINE__, $errors);
+            if (count($errors) > 0) {
+                CustomLogger::logInfo("hi");
 
-        // Delegate the persistence logic to the repository
-        return $this->orderRepository->createOrder($orderItems);
+                throw new ValidationFailedException($input, $errors);
+            }
+        }
+
+        return $this->orderRepository->createOrder($orderItemsInput);
     }
 
     /**
@@ -41,7 +58,6 @@ class OrderService
     {
         return $this->orderRepository->getDates($orders);
     }
-
 
     /**
      * Retrieves an order by order number and maps it to a GraphQL response DTO.

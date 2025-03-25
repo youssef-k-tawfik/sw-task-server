@@ -9,8 +9,6 @@ use GraphQL\Type\Definition\Type;
 
 use App\Config\Container;
 
-use App\GraphQL\Types\Attribute\SelectedAttributeInputType;
-
 class OrderItemInputType extends InputObjectType
 {
     public function __construct(Container $container)
