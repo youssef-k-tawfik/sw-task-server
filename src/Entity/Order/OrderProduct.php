@@ -93,6 +93,10 @@ class OrderProduct
 
     public function setQuantity(int $quantity): self
     {
+        if ($quantity <= 0) {
+            throw new \InvalidArgumentException('quantity must be a positive number.');
+        }
+
         $this->quantity = $quantity;
         return $this;
     }
