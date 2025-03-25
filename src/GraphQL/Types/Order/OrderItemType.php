@@ -10,7 +10,6 @@ use GraphQL\Type\Definition\Type;
 use App\Config\Container;
 
 use App\GraphQL\Types\ProductType;
-use App\GraphQL\Types\Attribute\SelectedAttributeType;
 
 class OrderItemType extends ObjectType
 {

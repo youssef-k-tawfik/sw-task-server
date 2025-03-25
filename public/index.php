@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-use Doctrine\ORM\EntityManager;
+// use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 use App\Config\Container;
 use App\Config\Doctrine;
@@ -11,17 +13,17 @@ use App\Utils\CustomLogger;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+
+error_reporting(E_ALL); // ! development only
+ini_set('display_errors', 1); // ! development only
+
 CustomLogger::logInfo('Starting server');
-
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 CustomLogger::logInfo("Requested method: " . $_SERVER['REQUEST_METHOD']);
 
 $allowed_domains = [
     'https://sw-task-client.yousseftawfik.com',
-    'http://localhost:5173',
-    'localhost:8000',
+    'http://localhost:5173', // ! development only
+    'localhost:8000', // ! development only
 ];
 
 // Get the Origin of the incoming request
@@ -39,7 +41,6 @@ if (in_array($origin, $allowed_domains) || in_array($host, $allowed_domains)) {
     header("Access-Control-Allow-Headers: Content-Type, Authorization");
     header('content-type: application/json; charset=utf-8');
 } else {
-    // Return 403 Forbidden response
     http_response_code(403);
     echo "403 Forbidden - This origin is not allowed.";
     exit();
@@ -52,17 +53,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // Loading environment variables
-// $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../'); // for local development only
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
 $dotenv->load();
 
-// Initializing EntityManager
-$entityManager = Doctrine::getEntityManager();
-
-// Registering EntityManager
+// Initialize Container
 $container = new Container();
+
+// Register EntityManager with the container
+$entityManager = Doctrine::getEntityManager();
 $container->set(EntityManagerInterface::class, $entityManager);
-$container->set(EntityManager::class, $entityManager);
+
+// Create and register the Validator with the container
+$validator = Validation::createValidator();
+$container->set(ValidatorInterface::class, $validator);
 
 // Routing
 $dispatcher = FastRoute\simpleDispatcher(
