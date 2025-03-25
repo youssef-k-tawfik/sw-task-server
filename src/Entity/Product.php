@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Entity\Order\OrderProduct;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+
+use App\Entity\Attribute\Attribute;
+use App\Entity\Price\Price;
+use App\Entity\Order\OrderProduct;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'product')]

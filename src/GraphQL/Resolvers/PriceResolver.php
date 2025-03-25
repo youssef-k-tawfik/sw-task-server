@@ -25,7 +25,7 @@ class PriceResolver
             }
 
             $prices = $this->priceRepository->fetchAllPrices($productID);
-            CustomLogger::debug($prices);
+            CustomLogger::debug(__FILE__, __LINE__,$prices);
             return $prices;
         } catch (\Exception $e) {
             throw new \Exception("Error fetching prices: {$e->getMessage()}");

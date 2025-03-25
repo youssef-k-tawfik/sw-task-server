@@ -2,11 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\GraphQL\Types;
+namespace App\GraphQL\Types\Order;
 
-use App\Config\Container;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
+
+use App\Config\Container;
+
+use App\GraphQL\Types\ProductType;
+use App\GraphQL\Types\Attribute\SelectedAttributeType;
 
 class OrderItemType extends ObjectType
 {

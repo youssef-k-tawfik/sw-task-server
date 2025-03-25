@@ -20,17 +20,24 @@ class CustomLogger
     /**
      * Logs variables in yellow color for debugging purposes
      */
-    public static function debug(mixed $var): void
-    {
+    public static function debug(
+        string $calling_file,
+        int $calling_line,
+        mixed $var
+    ): void {
         // Only log debug messages in development environment
         $env = $_ENV['APP_ENV'] ?? 'production';
         if ($env !== 'development') {
             return;
         }
 
-        // Get the caller file
-        $backtrace = debug_backtrace();
-        $caller = $backtrace[1]['file'] ?? 'unknown file';
+        // Substring the file name to start with 'src'
+        $src_pos = strpos($calling_file, 'src');
+        if ($src_pos !== false) {
+            $calling_file = substr($calling_file, $src_pos);
+        }
+
+        $caller = $calling_file . ':' . $calling_line ?? 'unknown file';
         error_log("\033[36mCalled from: " . $caller . "\033[0m");
 
         // transform the variable into a string

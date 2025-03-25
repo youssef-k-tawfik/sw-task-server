@@ -25,7 +25,7 @@ class AttributesResolver
                 ->fetchAttributes($productId);
 
             $attributes = $this->mapAttributes($attributes);
-            CustomLogger::debug($attributes);
+            CustomLogger::debug(__FILE__, __LINE__,$attributes);
             return $attributes;
         } catch (\Exception $e) {
             throw new \Exception("Error fetching attributes: {$e->getMessage()}");

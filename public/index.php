@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+
 use App\Config\Container;
 use App\Config\Doctrine;
 use App\Utils\CustomLogger;
-
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -33,8 +33,7 @@ $host = $_SERVER['HTTP_HOST'] ?? '';
 CustomLogger::logInfo("Requesting host: $host");
 
 // Check if the origin is in the list of allowed domains
-if (in_array($origin, $allowed_domains) || in_array($host, $allowed_domains)) { // development only
-    // if (in_array($origin, $allowed_domains)) {
+if (in_array($origin, $allowed_domains) || in_array($host, $allowed_domains)) {
     header("Access-Control-Allow-Origin: $origin");
     header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
     header("Access-Control-Allow-Headers: Content-Type, Authorization");

@@ -38,7 +38,7 @@ class ProductService
 
             $products = $this->mapGallery($products);
 
-            // CustomLogger::debug($products);
+            // CustomLogger::debug(__FILE__, __LINE__,$products);
             if ($category) {
                 CustomLogger::logInfo("Fetched '{$category}' category products");
             } else if ($productId) {

@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Config\Container;
-use App\GraphQL\GraphQLSchema;
-use App\Utils\CustomLogger;
 use GraphQL\GraphQL as GraphQLBase;
 use RuntimeException;
 use Throwable;
+
+use App\Config\Container;
+use App\GraphQL\GraphQLSchema;
+use App\Utils\CustomLogger;
 
 class GraphQL
 {

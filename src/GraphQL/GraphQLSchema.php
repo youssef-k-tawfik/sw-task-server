@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 namespace App\GraphQL;
 
-use App\GraphQL\Resolvers\OrderResolver;
-use App\GraphQL\Resolvers\ProductResolver;
-use App\GraphQL\Resolvers\CategoryResolver;
-
-use App\GraphQL\Types\ProductType;
-use App\GraphQL\Types\CategoryType;
-use App\GraphQL\Types\OrderResponseType;
-use App\GraphQL\Types\OrderItemInputType;
-
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Schema;
 use GraphQL\Type\SchemaConfig;
 
 use App\Config\Container;
-use App\GraphQL\Types\OrderItemType;
+
+use App\GraphQL\Types\ProductType;
+use App\GraphQL\Types\CategoryType;
+use App\GraphQL\Types\Order\OrderItemInputType;
+use App\GraphQL\Types\Order\OrderResponseType;
+
+use App\GraphQL\Resolvers\OrderResolver;
+use App\GraphQL\Resolvers\ProductResolver;
+use App\GraphQL\Resolvers\CategoryResolver;
+
 
 class GraphQLSchema
 {

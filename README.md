@@ -18,6 +18,10 @@ To seed the database, run the following command from the `dev` branch:
 php data/seed.php
 ```
 
+## Database Schema
+
+in `dev` branch you may import the `/data/ChartDB(sw-task-db-schema).json` file into `https://app.chartdb.io/` to check the database schema.
+
 ## Future Enhancements
 
 The project still has a lot to be added, such as:

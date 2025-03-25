@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use Doctrine\ORM\EntityManagerInterface;
+
 use App\Entity\Order\Order;
 use App\Entity\Order\OrderProduct;
 use App\Entity\Product;
-use App\Entity\Attribute;
-use App\Entity\Price;
+use App\Entity\Attribute\Attribute;
+
 use App\Service\ProductService;
 use App\Utils\CustomLogger;
-use Doctrine\ORM\EntityManagerInterface;
 
 class OrderRepository
 {
@@ -52,7 +53,7 @@ class OrderRepository
 
             // Process each order item
             foreach ($orderItems as $itemData) {
-                CustomLogger::debug("Processing order item: " . json_encode($itemData));
+                CustomLogger::debug(__FILE__, __LINE__,"Processing order item: " . json_encode($itemData));
                 CustomLogger::logInfo("processing id: " . $itemData['productId']);
 
                 // Fetching the product
@@ -83,7 +84,7 @@ class OrderRepository
                 if (empty($priceResult)) {
                     throw new \Exception("Price not found for product: " . $itemData['productId']);
                 }
-                CustomLogger::debug("Price result: " . json_encode($priceResult));
+                CustomLogger::debug(__FILE__, __LINE__,"Price result: " . json_encode($priceResult));
 
                 $priceAmount = (float)$priceResult[0]['amount'];
                 CustomLogger::logInfo("Price found: " . $priceAmount);
@@ -92,14 +93,14 @@ class OrderRepository
                 $quantity = (int)$itemData['quantity'];
                 $itemCost = $priceAmount * $quantity;
                 $totalCost += $itemCost;
-                CustomLogger::debug("total cost: " . $totalCost);
+                CustomLogger::debug(__FILE__, __LINE__,"total cost: " . $totalCost);
 
                 // Creating a new OrderProduct entity and setting the associations
                 $orderProduct = new OrderProduct();
                 $orderProduct->setOrder($order);
                 $orderProduct->setProduct($product);
                 $orderProduct->setQuantity($quantity);
-                CustomLogger::debug("Order product created");
+                CustomLogger::debug(__FILE__, __LINE__,"Order product created");
 
                 // Fetching products attributes if any
                 if (!empty($itemData['selectedAttributes'])) {
@@ -118,10 +119,10 @@ class OrderRepository
                         if (!$attribute) {
                             throw new \Exception("Attribute not found: " . $selectedAttribute['value']);
                         }
-                        CustomLogger::debug("Attribute found: " . $attribute->getValue());
+                        CustomLogger::debug(__FILE__, __LINE__,"Attribute found: " . $attribute->getValue());
 
                         $orderProduct->addSelectedAttribute($attribute);
-                        CustomLogger::debug("Attribute added to order product");
+                        CustomLogger::debug(__FILE__, __LINE__,"Attribute added to order product");
                     }
                     CustomLogger::logInfo("Attributes added!");
                 }
@@ -176,50 +177,30 @@ class OrderRepository
     }
 
     /**
-     * Fetches the order with the given order number.
+     * Retrieves an Order along with its associated OrderProducts, Products, and SelectedAttributes.
      *
      * @param string $orderNumber
-     * @return array
+     * @return Order
+     * @throws \Exception If the order with the given order number is not found.
      */
-    // public function getOrder(string $orderNumber): array
+    // public function getOrder(string $orderNumber): Order
     // {
-    //     CustomLogger::logInfo("Fetching order: " . $orderNumber);
-    //     try {
-    //         $order = $this->entityManager
-    //             ->getRepository(Order::class)
-    //             ->findOneBy(['orderNumber' => $orderNumber]);
+    //     $query = $this->entityManager->createQuery(
+    //         'SELECT o, op, p, a
+    //          FROM App\Entity\Order\Order o
+    //          JOIN o.orderProducts op
+    //          JOIN op.product p
+    //          LEFT JOIN op.selectedAttributes a
+    //          WHERE o.orderNumber = :orderNumber'
+    //     )->setParameter('orderNumber', $orderNumber);
 
-    //         if ($order) {
-    //             $orderData = [];
+    //     /** @var Order|null $order */
+    //     $order = $query->getOneOrNullResult();
 
-    //             foreach ($order->getOrderProducts() as $orderProduct) {
-    //                 $product = $orderProduct->getProduct();
-    //                 $productId = $orderProduct->getProduct()->getId();
-    //                 $productDetails = $this->productService->getAllProducts(null, $productId);
-    //                 $productDetails = $product[0];
-    //                 // CustomLogger::debug("Product fetched: " . json_encode($product));
-
-    //                 $attributes = $product->getAttributes();
-    //                 CustomLogger::debug("Attributes fetched: " . json_encode($attributes->toArray()));
-
-    //                 $productData = [
-    //                     'product' => $product,
-    //                     'quantity' => $orderProduct->getQuantity(),
-    //                     // 'selectedAttributes' => $selectedAttributes->toArray()
-    //                 ];
-
-    //                 $orderData[] = $productData;
-    //             }
-
-    //             CustomLogger::logInfo("Order fetched successfully!");
-    //             return $orderData;
-    //         } else {
-    //             CustomLogger::logInfo("Order not found: " . $orderNumber);
-    //             throw new \Exception("Order not found: " . $orderNumber);
-    //         }
-    //     } catch (\Exception $e) {
-    //         CustomLogger::logInfo("Error fetching order: " . $e->getMessage());
-    //         throw $e;
+    //     if (!$order) {
+    //         throw new \Exception("Order not found: " . $orderNumber);
     //     }
+
+    //     return $order;
     // }
 }

@@ -64,6 +64,10 @@ class Order
 
     public function setTotalCost(float $totalCost): self
     {
+        if ($totalCost <= 0) {
+            throw new \InvalidArgumentException('Total cost must be a positive number.');
+        }
+
         $this->totalCost = $totalCost;
         return $this;
     }

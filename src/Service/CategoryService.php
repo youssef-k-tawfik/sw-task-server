@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
+
 use App\Entity\Category;
 use App\Utils\CustomLogger;
 
@@ -37,7 +38,7 @@ class CategoryService
         //     $categories
         // );
 
-        CustomLogger::debug($categories);
+        CustomLogger::debug(__FILE__, __LINE__, $categories);
         CustomLogger::logInfo('Fetched all categories');
         return $categories;
     }

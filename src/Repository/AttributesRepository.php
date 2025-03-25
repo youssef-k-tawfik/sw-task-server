@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\Attribute;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+
+use App\Entity\Attribute\Attribute;
 
 class AttributesRepository extends EntityRepository
 {
